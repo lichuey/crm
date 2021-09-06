@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--保持数据为空即可，这里面的操作都交给Spring容器完成-->
+
+    <!--打印sql-->
+    <settings>
+        <!-- 控制台打印sql语句:简单 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+</configuration>
