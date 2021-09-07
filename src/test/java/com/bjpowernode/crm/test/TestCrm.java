@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.test;
 
+import com.bjpowernode.crm.base.util.MD5Util;
 import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
@@ -76,5 +77,13 @@ public class TestCrm {
         for (User user : users) {
             System.out.println(user);
         }
+    }
+
+    //测试加密
+    @Test
+    public void test05() {
+        String s = "123";
+        String md5 = MD5Util.getMD5(s);
+        System.out.println(md5);
     }
 }
