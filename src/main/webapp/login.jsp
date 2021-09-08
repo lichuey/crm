@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link href="${pageContext.request.contextPath}/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<%--jquery的文件--%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/jquery/jquery-1.11.1-min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/jquery/layer/layer.js"></script>
@@ -21,7 +21,7 @@
 			<div class="page-header">
 				<h1>登录</h1>
 			</div>
-			<form action="workbench/index.html" class="form-horizontal" role="form">
+			<form action="" class="form-horizontal" role="form">
 				<div class="form-group form-group-lg">
 					<%--用户名--%>
 					<div style="width: 350px;">
@@ -41,13 +41,27 @@
 					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
 							<span id="msg">${message}</span>
 					</div>
-					<button type="button" onclick="login()" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
+					<button type="button" id="button" onclick="login()" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
 				</div>
 			</form>
 		</div>
 	</div>
 </body>
 <script>
+
+	<%--&lt;%&ndash;登录时，用户名和密码不能为空&ndash;%&gt;
+	$(function () {
+		$("#button").click(function () {
+				var loginAct = $.trim($("#loginAct").val());
+				var loginPwd = $.trim($("#loginPwd").val());
+
+				if (loginAct == "" || loginPwd == "") {
+					$("#msg").html("用户名或密码不能为空");
+				}
+
+		});
+	});--%>
+
 	<%--点击图片改变验证码--%>
 	function changeCode() {
 		//attr:attribute 操作自定义属性 prop:操作固有属性
