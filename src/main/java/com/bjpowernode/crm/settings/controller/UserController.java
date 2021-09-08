@@ -1,15 +1,15 @@
 package com.bjpowernode.crm.settings.controller;
 
-import cn.hutool.db.Session;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmException;
-import com.bjpowernode.crm.base.util.MD5Util;
+import com.bjpowernode.crm.base.util.FileUploadUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -72,4 +72,13 @@ public class UserController {
         }
         return resultVo;
     }
+
+    //异步上传文件
+    @RequestMapping("/settings/user/fileUpload")
+    @ResponseBody
+    public ResultVo fileUpload(MultipartFile photo,HttpServletRequest request) {
+        return FileUploadUtil.fileUpload(photo, request);
+    }
+
+
 }

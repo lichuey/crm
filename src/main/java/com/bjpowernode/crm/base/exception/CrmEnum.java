@@ -7,7 +7,9 @@ public enum CrmEnum {
     USER_LOGIN_LOGINTIMEEXPIRE("001-001-003", "登录时间失效"),
     USER_LOGIN_LOGINLOCT("001-001-004", "用户被锁定"),
     USER_LOGIN_LOGINIPNOTALLOW("001-001-005", "用户ip不被允许"),
-    USER_UPDATE_OLDPOWERISFALSE("001-002-001", "原密码不正确");
+    USER_UPDATE_OLDPOWERISFALSE("001-002-001", "原密码不正确"),
+    USER_UPDATE_FILESUFFIXFALSE("001-002-002", "文件扩展名错误"),
+    USER_UPDATE_FILESIZEFALSE("001-002-003", "文件大小错误");
 
     private String code;//业务码
     private String message;//错误消息

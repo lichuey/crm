@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/crm/jquery/jquery-1.11.1-min.js"></script>
 <script type="text/javascript" src="/crm/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/crm/jquery/layer/layer.js"></script>
-<%--异步上传js--%>
+<%--异步上传文件js--%>
 <script type="text/javascript" src="/crm/jquery/ajaxfileupload.js"></script>
 
 <script type="text/javascript">
@@ -116,6 +116,7 @@
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal" role="form">
+						<%--图片路径的隐藏域--%>
 						<input type="hidden" id="img" >
 
 
@@ -142,13 +143,13 @@
 
 						<div class="form-group">
 							<label for="confirmPwd" class="col-sm-2 control-label">上传头像</label>
-							<a href="javascript:;" class="a-upload mr10" style="position: absolute;left: 240px"><input type="file" name="photo" id="photo">点击这里上传文件</a>
+							<a href="javascript:" class="a-upload mr10" style="position: absolute;left: 240px"><input type="file" name="photo" id="photo">点击这里上传文件</a>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+					<button type="button" onclick="updatePwd()" class="btn btn-primary" data-dismiss="modal">更新</button>
 				</div>
 			</div>
 		</div>
@@ -266,7 +267,40 @@
 			$("#newPwd").val = "";
 			layer.alert("两次输入密码不一致", {icon: 5});
 		}
-	})
+	});
+
+	//异步上传文件
+	$('#photo').change(function () {
+		$.ajaxFileUpload({
+					url: '/crm/settings/user/fileUpload', //用于文件上传的服务器端请求地址
+					fileElementId: 'photo', //文件上传域的ID
+					dataType: 'json', //返回值类型 一般设置为json
+					success: function (data, status) {
+						if (data.resOK) {
+							$("#img").val(data.t);
+							//上传文件成功
+							layer.alert(data.message, {icon: 6});
+						} else {
+							//上传文件失败
+							layer.alert(data.message, {icon: 5});
+						}
+					}
+				}
+		);
+		return false;
+	});
+
+	//更新用户密码
+	function updatePwd() {
+		$.ajax("", {
+			//在js中获取el表达式中的值
+			"id": "${sessionScope.user.id}",
+			"userPwd": $("#newPwd").val(),
+			"photoPath": $("#img").val()
+		}, function () {
+
+		}, "json");
+	}
 
 
 </script>
