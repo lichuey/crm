@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace的值就是mapper接口的全限定名称-->
+<mapper namespace="com.bjpowernode.crm.workbench.mapper.ActivityMapper">
+
+        <select id="list" resultType="activity">
+            select * from tbl_activity limit #{page},#{pageSize}
+        </select>
+</mapper>

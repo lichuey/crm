@@ -7,7 +7,10 @@ import java.util.List;
 public interface ActivityService {
 
         //查询所有的市场活动
-        List<Activity> selectAllActivity();
+        List<Activity> selectAllActivity(int page,int pageSize);
+
+        //查询总记录数
+        int count();
 }
 
 
