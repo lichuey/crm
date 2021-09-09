@@ -1,16 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
+<%
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
 <html>
-<head>
-<meta charset="UTF-8">
-<link href="${pageContext.request.contextPath}/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/jquery/layer/layer.js"></script>
-</head>
+	<head>
+		<base href="<%=basePath%>">
+		<meta charset="UTF-8">
+		<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+		<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+			<script type="text/javascript" src="jquery/layer/layer.js"></script>
+	</head>
 <body>
 	<div style="position: absolute; top: 0px; left: 0px; width: 60%;">
-		<img src="${pageContext.request.contextPath}/image/IMG_7114.JPG" style="width: 100%; position: relative; top: 50px;">
+		<img src="image/IMG_7114.JPG" style="width: 100%; position: relative; top: 50px;">
 	</div>
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
 		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2020&nbsp;动力节点</span></div>
@@ -35,7 +38,7 @@
 					<div style="width: 350px; position: relative;top: 40px;">
 						<input id="inputCode" class="form-control" type="text" placeholder="请输入验证码" style="width: 220px">
 						<%--cursor:pointer 鼠标放上显示手指状--%>
-						<img src="/crm/code"  id="code" onclick="changeCode()" alt="无法显示图片" style="cursor:pointer; width:120px; height:40px; position: absolute; right: 0; top: 0;" >
+						<img src="code"  id="code" onclick="changeCode()" alt="无法显示图片" style="cursor:pointer; width:120px; height:40px; position: absolute; right: 0; top: 0;" >
 					</div>
 					<%--回显消息--%>
 					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
@@ -51,7 +54,7 @@
 	<%--点击图片改变验证码--%>
 	function changeCode() {
 		//attr:attribute 操作自定义属性 prop:操作固有属性
-		$("#code").prop("src", "/crm/code?time=" + new Date().getTime());
+		$("#code").prop("src", "code?time=" + new Date().getTime());
 	}
 	<%--登录--%>
 	function login() {
@@ -63,7 +66,7 @@
 			if (!data.resOK) {
 				layer.alert(data.message, {icon: 5});
 			} else {
-				location.href = "/crm/settings/user/toIndex";
+				location.href = "toView/workbench/index";
 			}
 		}, 'json');
 	}
@@ -78,7 +81,7 @@
 				if (!data.resOK) {
 					layer.alert(data.message, {icon: 5});
 				} else {
-					location.href = "/crm/settings/user/toIndex";
+					location.href = "toView/workbench/index";
 				}
 			}, 'json');
 		}

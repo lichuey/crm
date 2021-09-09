@@ -45,11 +45,13 @@ public class UserController {
         return resultVo;
     }
 
+    /*
     //跳转到主页面
     @RequestMapping("/settings/user/toIndex")
     public String toLogin() {
         return "workbench/index";
     }
+    */
 
     //登出系统
     @RequestMapping("/settings/user/logOut")

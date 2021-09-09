@@ -41,8 +41,8 @@
 				$(this).children("a").css("color","white");
 			});
 
-
-			window.open("main/index.html","workareaFrame");
+			//页面加载完毕，跳转到后台返回一个视图页面到工作区
+			window.open("toView/workbench/main/index","workareaFrame");
 
 		});
 
@@ -225,11 +225,11 @@
 			<div id="navigation" style="left: 0px; width: 18%; position: relative; height: 100%; overflow:auto;">
 
 				<ul id="no1" class="nav nav-pills nav-stacked">
-					<li class="liClass"><a href="main/index.html" target="workareaFrame"><span class="glyphicon glyphicon-home"></span> 工作台</a></li>
-					<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-tag"></span> 动态</a></li>
-					<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-time"></span> 审批</a></li>
-					<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户公海</a></li>
-					<li class="liClass"><a href="activity/index.html" target="workareaFrame"><span class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
+					<li class="liClass"><a href="toView/workbench/main/index" target="workareaFrame"><span class="glyphicon glyphicon-home"></span> 工作台</a></li>
+					<li class="liClass"><a href="" target="workareaFrame"><span class="glyphicon glyphicon-tag"></span> 动态</a></li>
+					<li class="liClass"><a href="" target="workareaFrame"><span class="glyphicon glyphicon-time"></span> 审批</a></li>
+					<li class="liClass"><a href="" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户公海</a></li>
+					<li class="liClass"><a href="toView/workbench/activity/index" target="workareaFrame"><span class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
 					<li class="liClass"><a href="clue/index.html" target="workareaFrame"><span class="glyphicon glyphicon-search"></span> 线索（潜在客户）</a></li>
 					<li class="liClass"><a href="customer/index.html" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户</a></li>
 					<li class="liClass"><a href="contacts/index.html" target="workareaFrame"><span class="glyphicon glyphicon-earphone"></span> 联系人</a></li>
