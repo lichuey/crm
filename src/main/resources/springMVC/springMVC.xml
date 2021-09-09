@@ -10,7 +10,7 @@
 
     <!--扫描Controller-->
     <context:component-scan base-package="com.bjpowernode.crm.settings.controller,
-com.bjpowernode.crm.base.controller" />
+com.bjpowernode.crm.base.controller,com.bjpowernode.crm.workbench.controller" />
 
     <!--处理器适配器和映射器-->
     <mvc:annotation-driven>

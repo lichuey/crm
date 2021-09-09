@@ -223,7 +223,8 @@
 								<td>结束日期</td>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="activityTbody">
+							<%--
 							<tr class="active">
 								<td><input type="checkbox" /></td>
 								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
@@ -231,13 +232,7 @@
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 							</tr>
-							<tr class="active">
-								<td><input type="checkbox" /></td>
-								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
-								<td>zhangsan</td>
-								<td>2020-10-10</td>
-								<td>2020-10-20</td>
-							</tr>
+							--%>
 						</tbody>
 					</table>
 				</div>
@@ -280,5 +275,20 @@
 			</div>
 			
 		</div>
+		<script>
+			//发送异步请求，获取所有市场活动
+			$.get("workbench/activity/list", function (data) {
+				for (var i = 0; i <= data.length; i++) {
+					var activity = data[i];
+					$("#activityTbody").append("<tr class=\"active\">\n" +
+							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+ activity.name +"</a></td>\n" +
+							"\t\t\t\t\t\t\t\t<td>"+ activity.owner +"</td>\n" +
+							"\t\t\t\t\t\t\t\t<td>"+ activity.startDate +"</td>\n" +
+							"\t\t\t\t\t\t\t\t<td>"+ activity.endDate +"</td>\n" +
+							"\t\t\t\t\t\t\t</tr>")
+				}
+			}, "json");
+		</script>
 	</body>
 </html>
