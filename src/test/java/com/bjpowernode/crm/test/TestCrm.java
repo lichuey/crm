@@ -35,7 +35,7 @@ public class TestCrm {
         user.setId("2d53edd0d5e14fe58158597b043389b2");
         user.setName("李文燕");
 
-        //userMapper.updateByPrimaryKeySelective(user);
+        userMapper.updateByPrimaryKeySelective(user);
         Example example = new Example(User.class);
         example.createCriteria().andEqualTo("id", "2d53edd0d5e14fe58158597b043389b2");
         User user1 = new User();

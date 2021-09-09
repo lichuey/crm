@@ -9,4 +9,7 @@ public interface UserService {
 
     //比较原密码是否正确
     void comparePwd(String oldPwd, User user);
+
+    //更新用户密码
+    void updatePwd(User user);
 }

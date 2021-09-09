@@ -72,4 +72,17 @@ public class UserServiceImpl implements UserService {
             throw new CrmException(CrmEnum.USER_UPDATE_OLDPOWERISFALSE);
         }
     }
+
+    //更新用户密码
+    @Override
+    public void updatePwd(User user) {
+        //加密密码
+        user.setLoginPwd(MD5Util.getMD5(user.getLoginPwd()));
+        //更新用户密码,返回影响记录条数
+        int count = userMapper.updateByPrimaryKeySelective(user);
+        //没有更新
+        if (count == 0) {
+            throw new CrmException(CrmEnum.USER_UPDATE_PASSWORD);
+        }
+    }
 }

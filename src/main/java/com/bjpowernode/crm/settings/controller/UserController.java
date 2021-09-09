@@ -80,5 +80,18 @@ public class UserController {
         return FileUploadUtil.fileUpload(photo, request);
     }
 
-
+    //更新用户密码
+    @RequestMapping("workbench/settings/user/updatePwd")
+    @ResponseBody
+    public ResultVo updatePwd(User user) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            userService.updatePwd(user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("用户密码更新成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }
