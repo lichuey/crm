@@ -16,10 +16,10 @@
         <property name="dataSource" ref="dataSource" />
 
         <!--Mybatis:扫描包,给定实体类别名,默认是类名首字母小写-->
-        <!--<property name="typeAliasesPackage" value="com.bjpowernode.crm.settings.bean" />-->
+        <property name="typeAliasesPackage" value="com.bjpowernode.crm.workbench.bean" />
 
         <!--批量扫描映射文件-->
-        <!--<property name="mapperLocations" value="classpath:mappers/*.xml" />-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml" />
 
         <!--导入SqlMapConfig.xml-->
         <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml" />

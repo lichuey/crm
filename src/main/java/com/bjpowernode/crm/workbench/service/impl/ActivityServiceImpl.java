@@ -21,9 +21,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     //查询所有的市场活动
     @Override
-    public List<Activity> selectAllActivity() {
+    public List<Activity> selectAllActivity(int page, int pageSize) {
         //查询所有的市场活动
-        List<Activity> activities = activityMapper.selectAll();
+        List<Activity> activities = activityMapper.list(page, pageSize);
 
         //遍历市场活动
         for (Activity activity : activities) {
@@ -33,5 +33,11 @@ public class ActivityServiceImpl implements ActivityService {
             activity.setOwner(user.getName());
         }
         return activities;
+    }
+
+    //查询总记录数
+    @Override
+    public int count() {
+        return activityMapper.selectAll().size();
     }
 }

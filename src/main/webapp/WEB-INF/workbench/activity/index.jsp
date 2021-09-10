@@ -236,8 +236,9 @@
 					</table>
 				</div>
 
-				<div style="height: 50px; position: relative;top: 30px;">
-					<div>
+				<div id="pages" style="height: 50px; position: relative;top: 30px;">
+					<%--分页--%>
+					<%--<div>
 						<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
 					</div>
 					<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
@@ -268,17 +269,18 @@
 								<li class="disabled"><a href="#">末页</a></li>
 							</ul>
 						</nav>
-					</div>
+					</div>--%>
 				</div>
-
+				<a href=""></a>
 			</div>
 
 		</div>
 		<script>
 			//发送异步请求，获取所有市场活动
 			$.get("workbench/activity/list", function (data) {
-				for (var i = 0; i <= data.length; i++) {
-					var activity = data[i];
+				$('#activityTbody').html("");
+				for (var i = 0; i < data.list.length; i++) {
+					var activity = data.list[i];
 					$("#activityTbody").append("<tr class=\"active\">\n" +
 							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
 							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+ activity.name +"</a></td>\n" +
@@ -287,7 +289,26 @@
 							"\t\t\t\t\t\t\t\t<td>"+ activity.endDate +"</td>\n" +
 							"\t\t\t\t\t\t\t</tr>")
 				}
+				for (var i = 1; i <= data.t; i++) {
+					$("#pages").append("<a style='margin-left: 5px' onclick='otherPage("+ i +")' href='javascript:;'>"+ i +"</a>")
+				}
 			}, "json");
+
+			function otherPage(i) {
+				$.get("workbench/activity/list", {'page':i}, function (data) {
+					$('#activityTbody').html("");
+					for (var i = 0; i < data.list.length; i++) {
+						var activity = data.list[i];
+						$("#activityTbody").append("<tr class=\"active\">\n" +
+								"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+ activity.name +"</a></td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ activity.owner +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ activity.startDate +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ activity.endDate +"</td>\n" +
+								"\t\t\t\t\t\t\t</tr>")
+					}
+				}, "json");
+			}
 		</script>
 	</body>
 </html>
