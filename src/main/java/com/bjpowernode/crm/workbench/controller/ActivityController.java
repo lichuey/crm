@@ -67,7 +67,7 @@ public class ActivityController{
 
     //使用BootStrap分页插件实现
     @RequestMapping("/workbench/activity/list")
-    public PageInfo list(@RequestParam(defaultValue = "1") int page) {
+    public PageInfo list(int page,int pageSize) {
         PageHelper.startPage(page, pageSize);
         //查询所有的市场活动
         List<Activity> activities = activityService.list();

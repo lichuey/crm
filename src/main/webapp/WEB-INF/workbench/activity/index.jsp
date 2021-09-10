@@ -328,53 +328,47 @@
 			}
 			*/
 
-			$.get("workbench/activity/list", function (data) {
-				console.log(data);
-				$('#activityTbody').html("");
-				for (var i = 0; i < data.list.length; i++) {
-					var activity = data.list[i];
-					$("#activityTbody").append("<tr class=\"active\">\n" +
-							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
-							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+ activity.name +"</a></td>\n" +
-							"\t\t\t\t\t\t\t\t<td>"+ activity.owner +"</td>\n" +
-							"\t\t\t\t\t\t\t\t<td>"+ activity.startDate +"</td>\n" +
-							"\t\t\t\t\t\t\t\t<td>"+ activity.endDate +"</td>\n" +
-							"\t\t\t\t\t\t\t</tr>")
-				}
-			}, "json");
-			$("#activityPage").bs_pagination({
-				currentPage: 1, // 页码
-				rowsPerPage: 30, // 每页显示的记录条数
-				maxRowsPerPage: 20, // 每页最多显示的记录条数
-				totalPages: 20, // 总页数
-				totalRows: 50, // 总记录条数
-				visiblePageLinks: 3, // 显示几个卡片
-				showGoToPage: true,
-				showRowsPerPage: true,
-				showRowsInfo: true,
-				showRowsDefaultInfo: true,
-				//该函数只要操作分页插件都会触发该函数
-				onChangePage : function(event, obj){
-					$.get("workbench/activity/list",{
-						'page':obj.currentPage
-					},function (data) {
-						//data:List<Activity>
-						$('#activityTbody').html("");
-						for(var i = 0; i < data.list.length; i++){
-							var activity = data.list[i];
-							//append:在指定元素的末尾拼接内容
-							$('#activityTbody').append("<tr class=\"active\">\n" +
-									"\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
-									"\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+activity.name+"</a></td>\n" +
-									"                            <td>"+activity.owner+"</td>\n" +
-									"\t\t\t\t\t\t\t<td>"+activity.startDate+"</td>\n" +
-									"\t\t\t\t\t\t\t<td>"+activity.endDate+"</td>\n" +
-									"\t\t\t\t\t\t</tr>");
+			refresh(1,3);
+
+			//刷新页面
+			function refresh(page,pageSize) {
+				//查询市场活动列表
+				$.get("workbench/activity/list", {
+					'page': page,
+					'pageSize': pageSize
+				}, function (data) {
+					$('#activityTbody').html("");
+					for (var i = 0; i < data.list.length; i++) {
+						var activity = data.list[i];
+						$("#activityTbody").append("<tr class=\"active\">\n" +
+								"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + activity.name + "</a></td>\n" +
+								"\t\t\t\t\t\t\t\t<td>" + activity.owner + "</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>" + activity.startDate + "</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>" + activity.endDate + "</td>\n" +
+								"\t\t\t\t\t\t\t</tr>")
+					}
+					$("#activityPage").bs_pagination({
+						currentPage: data.pageNum, // 页码
+						rowsPerPage: data.pageSize, // 每页显示的记录条数
+						maxRowsPerPage: 20, // 每页最多显示的记录条数
+						totalPages: data.pages, // 总页数
+						totalRows: data.total, // 总记录条数
+						visiblePageLinks: 3, // 显示几个卡片
+						showGoToPage: true,
+						showRowsPerPage: true,
+						showRowsInfo: true,
+						showRowsDefaultInfo: true,
+						//该函数只要操作分页插件都会触发该函数
+						onChangePage : function(event, obj){
+							refresh(obj.currentPage,obj.rowsPerPage);
 						}
-					},'json');
-					//pageList(obj.rowsPerPage,obj.currentPage);
-				}
-			});
+					});
+				}, "json");
+			}
+
+
+
 		</script>
 	</body>
 </html>
