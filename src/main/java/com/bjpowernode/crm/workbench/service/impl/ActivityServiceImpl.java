@@ -1,6 +1,10 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.bjpowernode.crm.base.exception.CrmEnum;
+import com.bjpowernode.crm.base.exception.CrmException;
+import com.bjpowernode.crm.base.util.DateTimeUtil;
+import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Activity;
@@ -100,5 +104,23 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public int count() {
         return activityMapper.selectAll().size();
+    }
+
+    //查询所有用户
+    @Override
+    public List<User> selectUsers() {
+        return userMapper.selectAll();
+    }
+
+    //保存活动
+    @Override
+    public void saveActivity(Activity activity, User user) {
+        activity.setId(UUIDUtil.uuid());
+        activity.setCreateTime(DateTimeUtil.getSysTime());
+        activity.setCreateBy(user.getName());
+        int count = activityMapper.insertSelective(activity);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_SAVE_FALSE);
+        }
     }
 }

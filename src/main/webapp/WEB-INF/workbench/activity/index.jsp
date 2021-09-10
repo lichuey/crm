@@ -40,46 +40,48 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" id="createForm" role="form">
 
                     <div class="form-group">
                         <label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span
                                 style="font-size: 15px; color: red;">*</span></label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <select class="form-control" id="create-marketActivityOwner">
+                            <select class="form-control" name="owner" id="create-marketActivityOwner">
+                                <%--
                                 <option>zhangsan</option>
                                 <option>lisi</option>
                                 <option>wangwu</option>
+                                --%>
                             </select>
                         </div>
                         <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span
                                 style="font-size: 15px; color: red;">*</span></label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-marketActivityName">
+                            <input type="text" class="form-control" name="name" id="create-marketActivityName">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-startTime">
+                            <input type="text" class="form-control" name="startDate" id="create-startTime">
                         </div>
                         <label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-endTime">
+                            <input type="text" class="form-control" name="endDate" id="create-endTime">
                         </div>
                     </div>
                     <div class="form-group">
 
                         <label for="create-cost" class="col-sm-2 control-label">成本</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-cost">
+                            <input type="text" class="form-control" name="cost" id="create-cost">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="create-describe" class="col-sm-2 control-label">描述</label>
                         <div class="col-sm-10" style="width: 81%;">
-                            <textarea class="form-control" rows="3" id="create-describe"></textarea>
+                            <textarea class="form-control" rows="3" name="description" id="create-describe"></textarea>
                         </div>
                     </div>
 
@@ -88,7 +90,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button type="button" id="saveBtn" class="btn btn-primary" data-dismiss="modal">保存</button>
             </div>
         </div>
     </div>
@@ -418,6 +420,49 @@
     function activityQuery() {
         refresh(1,3)
     }
+
+    //查询所有用户
+    $.get("workbench/activity/queryUsers", function (data) {
+        //data:List<User>
+        for (var i in data) {
+            var user = data[i];
+            $("#create-marketActivityOwner").append("<option value='" + user.id + "'>" + user.name + "</option>")
+        }
+    }, "json");
+
+    //创建拟态框开始日期
+    $("#create-startTime").datetimepicker({
+        language: "zh-CN",
+        format: "yyyy-mm-dd",//显示格式
+        minView: "month",//设置只显示到月份
+        initialDate: new Date(),//初始化当前日期
+        autoclose: true,//选中自动关闭
+        todayBtn: true, //显示今日按钮
+        clearBtn: true,
+        pickerPosition: "bottom-left"
+    });
+
+    //创建拟态框结束日期
+    $("#create-endTime").datetimepicker({
+        language: "zh-CN",
+        format: "yyyy-mm-dd",//显示格式
+        minView: "month",//设置只显示到月份
+        initialDate: new Date(),//初始化当前日期
+        autoclose: true,//选中自动关闭
+        todayBtn: true, //显示今日按钮
+        clearBtn: true,
+        pickerPosition: "bottom-left"
+    });
+
+    $("#saveBtn").bind("click",function () {
+        $.post("workbench/activity/saveOrUpdate", $('#createForm').serialize(), function (data) {
+            //data：resultVo
+            if (data.resOK) {
+                alert(data.message);
+            }
+        }, "json");
+    })
+
 
 </script>
 </body>

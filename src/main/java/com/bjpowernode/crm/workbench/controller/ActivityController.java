@@ -1,15 +1,17 @@
 package com.bjpowernode.crm.workbench.controller;
 
 import com.bjpowernode.crm.base.bean.ResultVo;
+import com.bjpowernode.crm.base.exception.CrmException;
+import com.bjpowernode.crm.base.util.CommonUtil;
+import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.bean.Activity;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -74,5 +76,29 @@ public class ActivityController{
         PageInfo<Activity> pageInfo = new PageInfo<>(activities);
 
         return pageInfo;
+    }
+
+    //查询所有用户
+    @RequestMapping("/workbench/activity/queryUsers")
+    public List<User> queryUsers() {
+        return activityService.selectUsers();
+    }
+
+    //保存或更新活动
+    @RequestMapping("/workbench/activity/saveOrUpdate")
+    public ResultVo saveOrUpdate(Activity activity, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+
+        try {
+            User user = CommonUtil.getCurrentUser(session);
+            //保存活动
+            activityService.saveActivity(activity, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("活动保存成功");
+        } catch (CrmException e) {
+            resultVo.setResOK(false);
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
     }
 }
