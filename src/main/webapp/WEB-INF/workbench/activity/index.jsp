@@ -461,6 +461,9 @@
                 alert(data.message);
             }
 
+            //手动刷新
+            refresh(1, 3);
+
             //重置表单 jquery没有对应的函数，原生态的js有  方案一
             //document.getElementById("createForm").reset();
 

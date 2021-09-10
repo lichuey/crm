@@ -85,10 +85,11 @@ public class ActivityServiceImpl implements ActivityService {
             criteria.andIn("owner", ids);
         }
 
-
-
         //分页
         PageHelper.startPage(page, pageSize);
+        //添加按创建时间降序排序
+        example.setOrderByClause("createTime desc");
+
         //查询所有的市场活动
         List<Activity> activities = activityMapper.selectByExample(example);
 
