@@ -238,6 +238,7 @@
 				</div>
 				
 				<div id="pages" style="height: 50px; position: relative;top: 30px;">
+					<div id="activityPage"></div>
 					<%--分页--%>
 					<%--<div>
 						<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
@@ -271,14 +272,31 @@
 							</ul>
 						</nav>
 					</div>--%>
-						<a href=""></a>
 				</div>
 
 			</div>
 			
 		</div>
+		<link rel="stylesheet" href="jquery/bs_pagination/jquery.bs_pagination.min.css" />
+		<script src="jquery/bs_pagination/en.js"></script>
+		<script src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 		<script>
-			//发送异步请求，获取所有市场活动
+
+			var rsc_bs_pag = {
+				go_to_page_title: 'Go to page',
+				rows_per_page_title: 'Rows per page',
+				current_page_label: 'Page',
+				current_page_abbr_label: 'p.',
+				total_pages_label: 'of',
+				total_pages_abbr_label: '/',
+				total_rows_label: 'of',
+				rows_info_records: 'records',
+				go_top_text: '首页',
+				go_prev_text: '上一页',
+				go_next_text: '下一页',
+				go_last_text: '末页'
+			};
+			/*//发送异步请求，获取所有市场活动
 			$.get("workbench/activity/list", function (data) {
 				$('#activityTbody').html("");
 				for (var i = 0; i < data.list.length; i++) {
@@ -310,7 +328,56 @@
 								"\t\t\t\t\t\t\t</tr>")
 					}
 				}, "json");
-			}
+			}*/
+
+			$.get("workbench/activity/list", function (data) {
+				console.log(data);
+				$('#activityTbody').html("");
+				for (var i = 0; i < data.list.length; i++) {
+					var activity = data.list[i];
+					$("#activityTbody").append("<tr class=\"active\">\n" +
+							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+ activity.name +"</a></td>\n" +
+							"\t\t\t\t\t\t\t\t<td>"+ activity.owner +"</td>\n" +
+							"\t\t\t\t\t\t\t\t<td>"+ activity.startDate +"</td>\n" +
+							"\t\t\t\t\t\t\t\t<td>"+ activity.endDate +"</td>\n" +
+							"\t\t\t\t\t\t\t</tr>")
+				}
+			}, "json");
+
+			$("#activityPage").bs_pagination({
+				currentPage: 1, // 页码
+				rowsPerPage: 30, // 每页显示的记录条数
+				maxRowsPerPage: 20, // 每页最多显示的记录条数
+				totalPages: 20, // 总页数
+				totalRows: 50, // 总记录条数
+				visiblePageLinks: 3, // 显示几个卡片
+				showGoToPage: true,
+				showRowsPerPage: true,
+				showRowsInfo: true,
+				showRowsDefaultInfo: true,
+				//该函数只要操作分页插件都会触发该函数
+				onChangePage : function(event, obj){
+					$.get("workbench/activity/list",{
+						'page':obj.currentPage
+					},function (data) {
+						//data:List<Activity>
+						$('#activityTbody').html("");
+						for(var i = 0; i < data.list.length; i++){
+							var activity = data.list[i];
+							//append:在指定元素的末尾拼接内容
+							$('#activityTbody').append("<tr class=\"active\">\n" +
+									"\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+									"\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">"+activity.name+"</a></td>\n" +
+									"                            <td>"+activity.owner+"</td>\n" +
+									"\t\t\t\t\t\t\t<td>"+activity.startDate+"</td>\n" +
+									"\t\t\t\t\t\t\t<td>"+activity.endDate+"</td>\n" +
+									"\t\t\t\t\t\t</tr>");
+						}
+					},'json');
+					//pageList(obj.rowsPerPage,obj.currentPage);
+				}
+			});
 		</script>
 	</body>
 </html>
