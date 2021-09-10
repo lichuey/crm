@@ -460,6 +460,12 @@
             if (data.resOK) {
                 alert(data.message);
             }
+
+            //重置表单 jquery没有对应的函数，原生态的js有  方案一
+            //document.getElementById("createForm").reset();
+
+            //方案二
+            document.querySelector("#createForm").reset();
         }, "json");
     })
 
