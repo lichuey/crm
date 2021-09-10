@@ -3,6 +3,8 @@ package com.bjpowernode.crm.workbench.controller;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.bean.Activity;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +25,8 @@ public class ActivityController{
     @Autowired
     private ActivityService activityService;
 
+     /*
+    //传统分页
     //返回所有的市场活动数据
     @RequestMapping("/workbench/activity/list")
     public ResultVo list(@RequestParam(defaultValue = "1") int page) {
@@ -39,4 +43,23 @@ public class ActivityController{
 
         return resultVo;
     }
+    */
+     //使用PageHelper
+     @RequestMapping("/workbench/activity/list")
+     public ResultVo list(@RequestParam(defaultValue = "1") int page) {
+         ResultVo resultVo = new ResultVo();
+         PageHelper.startPage(page, pageSize);
+         //查询所有的市场活动
+         List<Activity> activities = activityService.list();
+         PageInfo<Activity> pageInfo = new PageInfo<>(activities);
+         //查询总记录数
+         long count = pageInfo.getTotal();
+         //查询总页数
+         long pages = pageInfo.getPages();
+
+         resultVo.setList(activities);
+         resultVo.setT(pages);
+
+         return resultVo;
+     }
 }
