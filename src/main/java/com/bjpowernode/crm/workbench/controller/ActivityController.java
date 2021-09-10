@@ -44,6 +44,7 @@ public class ActivityController{
         return resultVo;
     }
     */
+      /*
      //使用PageHelper
      @RequestMapping("/workbench/activity/list")
      public ResultVo list(@RequestParam(defaultValue = "1") int page) {
@@ -62,4 +63,16 @@ public class ActivityController{
 
          return resultVo;
      }
+     */
+
+    //使用BootStrap分页插件实现
+    @RequestMapping("/workbench/activity/list")
+    public PageInfo list(@RequestParam(defaultValue = "1") int page) {
+        PageHelper.startPage(page, pageSize);
+        //查询所有的市场活动
+        List<Activity> activities = activityService.list();
+        PageInfo<Activity> pageInfo = new PageInfo<>(activities);
+
+        return pageInfo;
+    }
 }

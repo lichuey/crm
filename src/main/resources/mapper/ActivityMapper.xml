@@ -4,7 +4,8 @@
 <!--namespace的值就是mapper接口的全限定名称-->
 <mapper namespace="com.bjpowernode.crm.workbench.mapper.ActivityMapper">
 
+    <!--后面不能加分号！-->
     <select id="list" resultType="activity">
-            select * from tbl_activity limit #{page},#{pageSize}
-        </select>
+            select * from tbl_activity
+    </select>
 </mapper>
