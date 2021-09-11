@@ -350,11 +350,12 @@
                 var activity = data.list[i];
                 $("#activityTbody").append("<tr class=\"active\">\n" +
                     "\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" value='"+ activity.id +"' class='son' onclick='abc()'/></td>\n" +
-                    "\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + activity.name + "</a></td>\n" +
+                    "\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" href='toView/workbench/activity/detail?id="+ activity.id +"'>" + activity.name + "</a></td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.owner + "</td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.startDate + "</td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.endDate + "</td>\n" +
                     "\t\t\t\t\t\t\t</tr>")
+
             }
             $("#activityPage").bs_pagination({
                 currentPage: data.pageNum, // 页码
