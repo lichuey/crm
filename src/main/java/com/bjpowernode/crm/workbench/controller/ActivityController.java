@@ -21,9 +21,6 @@ import java.util.List;
 @RestController
 public class ActivityController{
 
-    //每页记录数
-    private int pageSize = 3;
-
     @Autowired
     private ActivityService activityService;
 

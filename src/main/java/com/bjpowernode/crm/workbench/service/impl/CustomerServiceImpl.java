@@ -6,6 +6,7 @@ import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Customer;
 import com.bjpowernode.crm.workbench.mapper.CustomerMapper;
 import com.bjpowernode.crm.workbench.service.CustomerService;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -24,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     //条件查询
     @Override
-    public List<Customer> selectCustomer(Customer customer) {
+    public List<Customer> selectCustomer(int page, int pageSize, Customer customer) {
         Example example = new Example(Customer.class);
         Example.Criteria criteria = example.createCriteria();
 
@@ -59,6 +60,11 @@ public class CustomerServiceImpl implements CustomerService {
         if (StrUtil.isNotEmpty(customer.getWebsite())) {
             criteria.andLike("website", "%" + customer.getWebsite() + "%");
         }
+
+        //分页
+        PageHelper.startPage(page, pageSize);
+        //添加按创建时间降序排序
+        example.setOrderByClause("name");//desc 降序
 
         List<Customer> customers = customerMapper.selectByExample(example);
 

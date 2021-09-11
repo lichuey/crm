@@ -2,6 +2,7 @@ package com.bjpowernode.crm.workbench.controller;
 
 import com.bjpowernode.crm.workbench.service.CustomerService;
 import com.bjpowernode.crm.workbench.bean.Customer;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,9 @@ public class CustomerController {
 
     //条件查询
     @RequestMapping("/workbench/customer/selectCustomer")
-    public List<Customer> selectCustomer(Customer customer) {
-        return customerService.selectCustomer(customer);
+    public PageInfo selectCustomer(int page, int pageSize, Customer customer) {
+
+        List<Customer> customerList = customerService.selectCustomer(page, pageSize, customer);
+        return new PageInfo<>(customerList);
     }
 }

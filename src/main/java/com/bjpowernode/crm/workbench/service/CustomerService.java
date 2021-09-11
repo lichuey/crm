@@ -7,5 +7,5 @@ import java.util.List;
 public interface CustomerService {
 
     //条件查询
-    List<Customer> selectCustomer(Customer customer);
+    List<Customer> selectCustomer(int page, int pageSize, Customer customer);
 }

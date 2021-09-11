@@ -243,7 +243,7 @@
 						</div>
 					  </div>
 					  
-					  <button type="button" onclick="select();" class="btn btn-default">查询</button>
+					  <button type="button" onclick="queryCustomer();" class="btn btn-default">查询</button>
 					  
 					</form>
 				</div>
@@ -281,7 +281,9 @@
 				</div>
 				
 				<div style="height: 50px; position: relative;top: 30px;">
-					<div>
+					<div id="customerPage">
+					</div>
+					<%--<div>
 						<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
 					</div>
 					<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
@@ -312,45 +314,53 @@
 								<li class="disabled"><a href="#">末页</a></li>
 							</ul>
 						</nav>
-					</div>
+					</div>--%>
 				</div>
 				
 			</div>
 			
 		</div>
+		<%--分页--%>
+		<link rel="stylesheet" href="jquery/bs_pagination/jquery.bs_pagination.min.css"/>
+		<script src="jquery/bs_pagination/en.js"></script>
+		<script src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 		<script>
 
+			//分页
+			var rsc_bs_pag = {
+				go_to_page_title: 'Go to page',
+				rows_per_page_title: 'Rows per page',
+				current_page_label: 'Page',
+				current_page_abbr_label: 'p.',
+				total_pages_label: 'of',
+				total_pages_abbr_label: '/',
+				total_rows_label: 'of',
+				rows_info_records: 'records',
+				go_top_text: '首页',
+				go_prev_text: '上一页',
+				go_next_text: '下一页',
+				go_last_text: '末页'
+			};
+
+			//刷新页面
+			refresh(1, 2);
+
 			//刷新
-			$.get("workbench/customer/selectCustomer", function (data) {
-				//data:List<customer>
-				var customerList = data;
-				for (var i = 0; i < customerList.length; i++) {
-					var customer = customerList[i];
-					$("#customerTbody").append("<tr>\n" +
-							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
-							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + customer.name + "</a></td>\n" +
-							"\t\t\t\t\t\t\t\t<td>" + customer.owner + "</td>\n" +
-							"\t\t\t\t\t\t\t\t<td>" + customer.phone + "</td>\n" +
-							"\t\t\t\t\t\t\t\t<td>" + customer.website + "</td>\n" +
-							"\t\t\t\t\t\t\t</tr>")
-				}
-			},"json");
-
-
-			//条件查询
-			function select() {
+			function refresh(page,pageSize) {
 				//清空
 				$("#customerTbody").html("");
 				$.get("workbench/customer/selectCustomer", {
+					"page": page,
+					"pageSize": pageSize,
 					"name": $("#name").val(),
 					"owner": $("#owner").val(),
 					"phone": $("#phone").val(),
 					"website": $("#website").val()
 				},function (data) {
-					//data:List<customer>
+					//data:PageInfo
 					var customerList = data;
-					for (var i = 0; i < customerList.length; i++) {
-						var customer = customerList[i];
+					for (var i = 0; i < customerList.list.length; i++) {
+						var customer = customerList.list[i];
 						$("#customerTbody").append("<tr>\n" +
 								"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
 								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + customer.name + "</a></td>\n" +
@@ -359,7 +369,28 @@
 								"\t\t\t\t\t\t\t\t<td>" + customer.website + "</td>\n" +
 								"\t\t\t\t\t\t\t</tr>")
 					}
+					$("#customerPage").bs_pagination({
+						currentPage: data.pageNum, // 页码
+						rowsPerPage: data.pageSize, // 每页显示的记录条数
+						maxRowsPerPage: 20, // 每页最多显示的记录条数
+						totalPages: data.pages, // 总页数
+						totalRows: data.total, // 总记录条数
+						visiblePageLinks: 3, // 显示几个卡片
+						showGoToPage: true,
+						showRowsPerPage: true,
+						showRowsInfo: true,
+						showRowsDefaultInfo: true,
+						//该函数只要操作分页插件都会触发该函数
+						onChangePage: function (event, obj) {
+							refresh(obj.currentPage, obj.rowsPerPage);
+						}
+					});
 				}, "json");
+			}
+
+			//查询顾客
+			function queryCustomer() {
+				refresh(1, 2);
 			}
 		</script>
 	</body>
