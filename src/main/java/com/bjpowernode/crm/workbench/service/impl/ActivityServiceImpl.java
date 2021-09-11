@@ -9,7 +9,9 @@ import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Activity;
+import com.bjpowernode.crm.workbench.bean.ActivityRemark;
 import com.bjpowernode.crm.workbench.mapper.ActivityMapper;
+import com.bjpowernode.crm.workbench.mapper.ActivityRemarkMapper;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ActivityRemarkMapper activityRemarkMapper;
 
     /*
     //传统方式
@@ -163,5 +168,29 @@ public class ActivityServiceImpl implements ActivityService {
         if (count == 0) {
             throw new CrmException(CrmEnum.ACTIVITY_DELETE_FALSE);
         }
+    }
+
+    //查询市场活动详情页的数据
+
+    @Override
+    public Activity selectDetail(String id) {
+        //通过id查询活动
+        Activity activity = activityMapper.selectByPrimaryKey(id);
+
+        //设置活动的owner
+        User user = userMapper.selectByPrimaryKey(activity.getOwner());
+        activity.setOwner(user.getName());
+
+        //设置活动的activityRemarkList
+       /* Example example = new Example(ActivityRemark.class);
+        example.createCriteria().andEqualTo("activityId", id);
+        List<ActivityRemark> activityRemarks = activityRemarkMapper.selectByExample(example);*/
+        ActivityRemark activityRemark = new ActivityRemark();
+        activityRemark.setActivityId(id);
+        List<ActivityRemark> activityRemarks = activityRemarkMapper.select(activityRemark);
+
+        activity.setActivityRemarkList(activityRemarks);
+
+        return activity;
     }
 }

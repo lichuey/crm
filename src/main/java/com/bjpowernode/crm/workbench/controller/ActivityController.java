@@ -117,4 +117,10 @@ public class ActivityController{
         }
         return resultVo;
     }
+
+    //查询市场活动详情页的数据
+    @RequestMapping("/workbench/activity/selectDetail")
+    public Activity selectDetail(String id) {
+        return activityService.selectDetail(id);
+    }
 }

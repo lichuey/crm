@@ -6,29 +6,24 @@ import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
 
 /**
- * 市场活动实体类
+ * 市场活动备注实体类
  */
 @Data
-@Table(name = "tbl_activity")
+@Table(name = "tbl_activity_remark")
 @NameStyle(Style.normal)
-public class Activity {
+public class ActivityRemark {
 
     @Id
     private String id;
-    private String owner;
-    private String name;
-    private String startDate;
-    private String endDate;
-    private String cost;
-    private String description;
+    private String noteContent;
     private String createTime;
     private String createBy;
     private String editTime;
     private String editBy;
-
-    //市场活动备注
-    private List<ActivityRemark> activityRemarkList;
+    private String editFlag;
+    private String activityId;
+    private String owner;
+    private String img;
 }

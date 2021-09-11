@@ -25,4 +25,7 @@ public interface ActivityService {
 
     //批量删除
     void deleteBatch(String ids);
+
+    //查询市场活动详情页的数据
+    Activity selectDetail(String id);
 }
