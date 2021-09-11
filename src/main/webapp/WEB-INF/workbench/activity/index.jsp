@@ -173,7 +173,6 @@
 </div>
 <div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
     <div style="width: 100%; position: absolute;top: 5px; left: 10px;">
-
         <div class="btn-toolbar" role="toolbar" style="height: 80px;">
             <form class="form-inline" role="form" style="position: relative;top: 8%; left: 5px;">
 
@@ -215,7 +214,7 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal">
                     <span class="glyphicon glyphicon-plus"></span> 创建
                 </button>
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span
+                <button type="button" onclick="openEditModel()" class="btn btn-default" data-toggle="modal"><span
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
                 <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
@@ -226,7 +225,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr style="color: #B3B3B3;">
-                    <td><input type="checkbox"/></td>
+                    <td><input type="checkbox" id="father"/></td>
                     <td>名称</td>
                     <td>所有者</td>
                     <td>开始日期</td>
@@ -355,7 +354,7 @@
             for (var i = 0; i < data.list.length; i++) {
                 var activity = data.list[i];
                 $("#activityTbody").append("<tr class=\"active\">\n" +
-                    "\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+                    "\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" class='son' onclick='abc()'/></td>\n" +
                     "\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + activity.name + "</a></td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.owner + "</td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.startDate + "</td>\n" +
@@ -426,7 +425,7 @@
         //data:List<User>
         for (var i in data) {
             var user = data[i];
-            $("#create-marketActivityOwner").append("<option value='" + user.id + "'>" + user.name + "</option>")
+            $("#create-marketActivityOwner").append("<option value='" + user.id + "'>" + user.name + "</option>");
         }
     }, "json");
 
@@ -472,6 +471,66 @@
         }, "json");
     })
 
+
+    //先写js勾中的脚本
+    //father勾中，其他全勾中，father没勾中，其他全没勾中
+    /*第一种
+    $("#father").click(function () {
+        var checked = $(this).prop("checked");
+        if (checked) {
+            $(".son").prop("checked", true);
+        } else {
+            $(".son").prop("checked", false);
+        }
+    })
+    */
+    //第二种
+    $("#father").click(function () {
+        $(".son").prop("checked", $(this).prop("checked"));
+    });
+
+/*
+    //通过勾中son的个数决定father是否勾中
+    //动态生成的dom元素开始不会初始化到html文档中，我们操作页面元素的时候才会初始化
+    //方案一:事件委托给第一个不是动态生成的父元素  动态生成的元素找不到，导致js也会失效
+    //参数1:绑定的事件名称 参数2:被绑定元素 参数3:触发的函数
+    $("#activityTbody").on("click",".son",function () {
+        //son被勾中的个数
+        var checkedLength = $(".son:checked").length;
+        //son的个数
+        var sonLength = $(".son").length;
+        //比较
+        if (checkedLength == sonLength) {
+            $("#father").prop("checked", true);
+        } else
+            $("#father").prop("checked", false);
+    })
+*/
+
+    //方案二:给生成的元素添加事件
+    function abc() {
+        //son被勾中的个数
+        var checkedLength = $(".son:checked").length;
+        //son的个数
+        var sonLength = $(".son").length;
+        //比较
+        if (checkedLength == sonLength) {
+            $("#father").prop("checked", true);
+        } else
+            $("#father").prop("checked", false);
+    }
+
+    //点击修改按钮的js判断 勾中一条记录
+    function openEditModel() {
+        var sonLength = $(".son:checked").length;
+        if (sonLength === 0) {
+            alert("选中记录数不能为空");
+        }else if (sonLength > 1) {
+            alert("选中记录数不能大于1");
+        } else {
+            $("#editActivityModal").modal("show");
+        }
+    }
 
 </script>
 </body>
