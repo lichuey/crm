@@ -8,23 +8,13 @@
     <meta charset="UTF-8">
 
     <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
-    <link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css"
-          rel="stylesheet"/>
+    <link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet"/>
 
     <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript"
-            src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
-    <script type="text/javascript">
-
-        $(function () {
-
-
-        });
-
-    </script>
 </head>
 <body>
 
@@ -90,7 +80,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" id="saveBtn" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button type="button" onclick="saveOrUpdate($(this).text())" class="btn btn-primary" data-dismiss="modal">保存</button>
             </div>
         </div>
     </div>
@@ -108,47 +98,51 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
+                <form id="editForm" class="form-horizontal" role="form">
 
                     <div class="form-group">
                         <label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span
                                 style="font-size: 15px; color: red;">*</span></label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <select class="form-control" id="edit-marketActivityOwner">
+                            <select class="form-control" name="owner" id="edit-marketActivityOwner">
+                                <%--
                                 <option>zhangsan</option>
                                 <option>lisi</option>
                                 <option>wangwu</option>
+                                --%>
                             </select>
                         </div>
                         <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span
                                 style="font-size: 15px; color: red;">*</span></label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-marketActivityName" value="发传单">
+                            <input type="text" class="form-control" name="name" id="edit-marketActivityName">
+                            <%--id隐藏域--%>
+                            <input type="hidden" id="id" name="id"/>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-startTime" value="2020-10-10">
+                            <input type="text" class="form-control" name="startDate" id="edit-startTime">
                         </div>
                         <label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-endTime" value="2020-10-20">
+                            <input type="text" class="form-control" name="endDate" id="edit-endTime">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="edit-cost" class="col-sm-2 control-label">成本</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-cost" value="5,000">
+                            <input type="text" class="form-control" name="cost" id="edit-cost">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="edit-describe" class="col-sm-2 control-label">描述</label>
                         <div class="col-sm-10" style="width: 81%;">
-                            <textarea class="form-control" rows="3" id="edit-describe">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
+                            <textarea class="form-control" rows="3" name="description" id="edit-describe"></textarea>
                         </div>
                     </div>
 
@@ -157,7 +151,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+                <button type="button" onclick="saveOrUpdate($(this).text())" class="btn btn-primary" data-dismiss="modal">更新</button>
             </div>
         </div>
     </div>
@@ -354,7 +348,7 @@
             for (var i = 0; i < data.list.length; i++) {
                 var activity = data.list[i];
                 $("#activityTbody").append("<tr class=\"active\">\n" +
-                    "\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" class='son' onclick='abc()'/></td>\n" +
+                    "\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" value='"+ activity.id +"' class='son' onclick='abc()'/></td>\n" +
                     "\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + activity.name + "</a></td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.owner + "</td>\n" +
                     "\t\t\t\t\t\t\t\t<td>" + activity.startDate + "</td>\n" +
@@ -453,8 +447,15 @@
         pickerPosition: "bottom-left"
     });
 
-    $("#saveBtn").bind("click",function () {
-        $.post("workbench/activity/saveOrUpdate", $('#createForm').serialize(), function (data) {
+    //保存或更新
+    function saveOrUpdate(text) {
+        var form;
+        if ("保存" == text) {
+            form = $('#createForm').serialize();
+        } else if ("更新" == text) {
+            form = $("#editForm").serialize();
+        }
+        $.post("workbench/activity/saveOrUpdate", form, function (data) {
             //data：resultVo
             if (data.resOK) {
                 alert(data.message);
@@ -469,7 +470,7 @@
             //方案二
             document.querySelector("#createForm").reset();
         }, "json");
-    })
+    }
 
 
     //先写js勾中的脚本
@@ -528,9 +529,66 @@
         }else if (sonLength > 1) {
             alert("选中记录数不能大于1");
         } else {
+            //打开修改模态框
             $("#editActivityModal").modal("show");
+            //获取选中的选择框id
+            var id = $($(".son:checked")[0]).val();
+            //发送异步请求获取活动数据
+            $.get("workbench/activity/queryById", {
+                "id": id
+            }, function (data) {
+                //data:activity 获取活动数据
+                var activity = data;
+
+                //查询用户列表
+                $.get("workbench/activity/queryUsers", function (data) {
+                    //data:List<User>
+                    $("#edit-marketActivityOwner").html("");
+                    for (var i in data) {
+                        var user = data[i];
+                        if (activity.owner == user.id) {
+                            $("#edit-marketActivityOwner").append("<option selected value='" + user.id + "'>" + user.name + "</option>");
+                        } else {
+                            $("#edit-marketActivityOwner").append("<option value='" + user.id + "'>" + user.name + "</option>");
+                        }
+                    }
+                }, "json");
+
+                //将活动数据存入编辑拟态框
+                $("#edit-marketActivityName").val(activity.name);
+                $("#edit-startTime").val(activity.startDate);
+                $("#edit-endTime").val(activity.endDate);
+                $("#edit-cost").val(activity.cost);
+                $("#edit-describe").val(activity.description);
+                //将id存入隐藏域中
+                $("#id").val(activity.id);
+            }, "json");
         }
     }
+
+    //修改拟态框开始日期
+    $("#edit-startTime").datetimepicker({
+        language: "zh-CN",
+        format: "yyyy-mm-dd",//显示格式
+        minView: "month",//设置只显示到月份
+        initialDate: new Date(),//初始化当前日期
+        autoclose: true,//选中自动关闭
+        todayBtn: true, //显示今日按钮
+        clearBtn: true,
+        pickerPosition: "bottom-left"
+    });
+
+    //修改拟态框结束日期
+    $("#edit-endTime").datetimepicker({
+        language: "zh-CN",
+        format: "yyyy-mm-dd",//显示格式
+        minView: "month",//设置只显示到月份
+        initialDate: new Date(),//初始化当前日期
+        autoclose: true,//选中自动关闭
+        todayBtn: true, //显示今日按钮
+        clearBtn: true,
+        pickerPosition: "bottom-left"
+    });
 
 </script>
 </body>

@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.workbench.service;
 
+import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
 
@@ -16,6 +17,9 @@ public interface ActivityService {
     //查询所有用户
     List<User> selectUsers();
 
-    //保存活动
-    void saveActivity(Activity activity, User user);
+    //保存或更新活动
+    ResultVo saveOrUpdate(Activity activity, User user);
+
+    //通过id查询活动
+    Activity queryById(String id);
 }

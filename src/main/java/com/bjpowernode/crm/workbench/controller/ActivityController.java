@@ -88,17 +88,18 @@ public class ActivityController{
     @RequestMapping("/workbench/activity/saveOrUpdate")
     public ResultVo saveOrUpdate(Activity activity, HttpSession session) {
         ResultVo resultVo = new ResultVo();
-
         try {
             User user = CommonUtil.getCurrentUser(session);
-            //保存活动
-            activityService.saveActivity(activity, user);
-            resultVo.setResOK(true);
-            resultVo.setMessage("活动保存成功");
+            resultVo = activityService.saveOrUpdate(activity, user);
         } catch (CrmException e) {
-            resultVo.setResOK(false);
             resultVo.setMessage(e.getMessage());
         }
         return resultVo;
+    }
+
+    //通过id查询活动
+    @RequestMapping("/workbench/activity/queryById")
+    public Activity queryById(String id) {
+        return activityService.queryById(id);
     }
 }

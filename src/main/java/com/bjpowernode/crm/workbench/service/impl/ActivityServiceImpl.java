@@ -1,6 +1,7 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmEnum;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.DateTimeUtil;
@@ -115,15 +116,36 @@ public class ActivityServiceImpl implements ActivityService {
         return userMapper.selectAll();
     }
 
-    //保存活动
+    //保存或更新活动
     @Override
-    public void saveActivity(Activity activity, User user) {
-        activity.setId(UUIDUtil.uuid());
-        activity.setCreateTime(DateTimeUtil.getSysTime());
-        activity.setCreateBy(user.getName());
-        int count = activityMapper.insertSelective(activity);
-        if (count == 0) {
-            throw new CrmException(CrmEnum.ACTIVITY_SAVE_FALSE);
+    public ResultVo saveOrUpdate(Activity activity, User user) {
+        ResultVo resultVo = new ResultVo();
+        //保存活动
+        if (activity.getId() == null) {
+            activity.setId(UUIDUtil.uuid());
+            activity.setCreateTime(DateTimeUtil.getSysTime());
+            activity.setCreateBy(user.getName());
+            int count = activityMapper.insertSelective(activity);
+            if (count == 0) {
+                throw new CrmException(CrmEnum.ACTIVITY_SAVE_FALSE);
+            }
+            resultVo.setMessage("添加市场活动成功");
+        } else {
+            activity.setEditTime(DateTimeUtil.getSysTime());
+            activity.setEditBy(user.getName());
+            int count = activityMapper.updateByPrimaryKeySelective(activity);
+            if (count == 0) {
+                throw new CrmException(CrmEnum.ACTIVITY_UPDATE_FALSE);
+            }
+            resultVo.setMessage("更新市场活动成功");
         }
+        resultVo.setResOK(true);
+        return resultVo;
+    }
+
+    //通过id查询活动
+    @Override
+    public Activity queryById(String id) {
+        return activityMapper.selectByPrimaryKey(id);
     }
 }
