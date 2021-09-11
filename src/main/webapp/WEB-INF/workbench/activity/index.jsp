@@ -211,7 +211,7 @@
                 <button type="button" onclick="openEditModel()" class="btn btn-default" data-toggle="modal"><span
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+                <button type="button" onclick="deleteActivities()" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
             </div>
 
         </div>
@@ -281,6 +281,7 @@
 <link rel="stylesheet" href="jquery/bs_pagination/jquery.bs_pagination.min.css"/>
 <script src="jquery/bs_pagination/en.js"></script>
 <script src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+<script type="text/javascript" src="jquery/layer/layer.js"></script>
 <script>
     var rsc_bs_pag = {
         go_to_page_title: 'Go to page',
@@ -589,6 +590,37 @@
         clearBtn: true,
         pickerPosition: "bottom-left"
     });
+
+    //删除活动
+    function deleteActivities() {
+        var length = $(".son:checked").length;
+        if (length == 0) {
+            alert("至少选择一个活动");
+        } else {
+            layer.alert('你确定删除这'+ length +'条活动吗？此操作不可逆！', {
+                time: 0 //不自动关闭
+                ,btn: ['删除', '取消']
+                ,yes: function(index){
+                    layer.close(index);
+                    //获取选中的id,存入数组中
+                    var ids = [];
+                    $(".son:checked").each(function () {
+                        ids.push($(this).val())
+                    });
+                    //删除活动
+                    $.get("workbench/activity/deleteBatch", {
+                        "ids": ids.join()
+                    }, function (data) {
+                        //data:resultVo
+                        if (data.resOK) {
+                            alert(data.message);
+                            refresh(1, 3);
+                        }
+                    }, "json");
+                }
+            });
+        }
+    }
 
 </script>
 </body>

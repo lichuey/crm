@@ -1,6 +1,7 @@
 package com.bjpowernode.crm.workbench.controller;
 
 import com.bjpowernode.crm.base.bean.ResultVo;
+import com.bjpowernode.crm.base.exception.CrmEnum;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.CommonUtil;
 import com.bjpowernode.crm.settings.bean.User;
@@ -101,5 +102,19 @@ public class ActivityController{
     @RequestMapping("/workbench/activity/queryById")
     public Activity queryById(String id) {
         return activityService.queryById(id);
+    }
+
+    //批量删除
+    @RequestMapping("/workbench/activity/deleteBatch")
+    public ResultVo deleteBatch(String ids) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            activityService.deleteBatch(ids);
+            resultVo.setResOK(true);
+            resultVo.setMessage("批量删除成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
     }
 }

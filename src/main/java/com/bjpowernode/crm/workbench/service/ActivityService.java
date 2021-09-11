@@ -22,4 +22,7 @@ public interface ActivityService {
 
     //通过id查询活动
     Activity queryById(String id);
+
+    //批量删除
+    void deleteBatch(String ids);
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -147,5 +148,20 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Activity queryById(String id) {
         return activityMapper.selectByPrimaryKey(id);
+    }
+
+    //批量删除
+    @Override
+    public void deleteBatch(String ids) {
+        //分割ids json串
+        String[] arr = ids.split(",");
+        //将arr数组转化给集合
+        List<String> id = Arrays.asList(arr);
+        Example example = new Example(Activity.class);
+        example.createCriteria().andIn("id", id);
+        int count = activityMapper.deleteByExample(example);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_DELETE_FALSE);
+        }
     }
 }
