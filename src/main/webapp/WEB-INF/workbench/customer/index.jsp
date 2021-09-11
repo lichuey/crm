@@ -198,7 +198,7 @@
 		</div>
 		
 		
-		
+		<%------------------------------------------------------------------------------------------------------------------------------%>
 		
 		<div>
 			<div style="position: relative; left: 10px; top: -10px;">
@@ -218,32 +218,32 @@
 					  <div class="form-group">
 						<div class="input-group">
 						  <div class="input-group-addon">名称</div>
-						  <input class="form-control" type="text">
+						  <input class="form-control" type="text" id="name">
 						</div>
 					  </div>
 					  
 					  <div class="form-group">
 						<div class="input-group">
 						  <div class="input-group-addon">所有者</div>
-						  <input class="form-control" type="text">
+						  <input class="form-control" type="text" id="owner">
 						</div>
 					  </div>
 					  
 					  <div class="form-group">
 						<div class="input-group">
 						  <div class="input-group-addon">公司座机</div>
-						  <input class="form-control" type="text">
+						  <input class="form-control" type="text" id="phone">
 						</div>
 					  </div>
 					  
 					  <div class="form-group">
 						<div class="input-group">
 						  <div class="input-group-addon">公司网站</div>
-						  <input class="form-control" type="text">
+						  <input class="form-control" type="text" id="website">
 						</div>
 					  </div>
 					  
-					  <button type="submit" class="btn btn-default">查询</button>
+					  <button type="button" onclick="select();" class="btn btn-default">查询</button>
 					  
 					</form>
 				</div>
@@ -266,7 +266,8 @@
 								<td>公司网站</td>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="customerTbody">
+							<%--
 							<tr>
 								<td><input type="checkbox" /></td>
 								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">动力节点</a></td>
@@ -274,13 +275,7 @@
 								<td>010-84846003</td>
 								<td>http://www.bjpowernode.com</td>
 							</tr>
-							<tr class="active">
-								<td><input type="checkbox" /></td>
-								<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">动力节点</a></td>
-								<td>zhangsan</td>
-								<td>010-84846003</td>
-								<td>http://www.bjpowernode.com</td>
-							</tr>
+							--%>
 						</tbody>
 					</table>
 				</div>
@@ -323,5 +318,49 @@
 			</div>
 			
 		</div>
+		<script>
+
+			//刷新
+			$.get("workbench/customer/selectCustomer", function (data) {
+				//data:List<customer>
+				var customerList = data;
+				for (var i = 0; i < customerList.length; i++) {
+					var customer = customerList[i];
+					$("#customerTbody").append("<tr>\n" +
+							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + customer.name + "</a></td>\n" +
+							"\t\t\t\t\t\t\t\t<td>" + customer.owner + "</td>\n" +
+							"\t\t\t\t\t\t\t\t<td>" + customer.phone + "</td>\n" +
+							"\t\t\t\t\t\t\t\t<td>" + customer.website + "</td>\n" +
+							"\t\t\t\t\t\t\t</tr>")
+				}
+			},"json");
+
+
+			//条件查询
+			function select() {
+				//清空
+				$("#customerTbody").html("");
+				$.get("workbench/customer/selectCustomer", {
+					"name": $("#name").val(),
+					"owner": $("#owner").val(),
+					"phone": $("#phone").val(),
+					"website": $("#website").val()
+				},function (data) {
+					//data:List<customer>
+					var customerList = data;
+					for (var i = 0; i < customerList.length; i++) {
+						var customer = customerList[i];
+						$("#customerTbody").append("<tr>\n" +
+								"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + customer.name + "</a></td>\n" +
+								"\t\t\t\t\t\t\t\t<td>" + customer.owner + "</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>" + customer.phone + "</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>" + customer.website + "</td>\n" +
+								"\t\t\t\t\t\t\t</tr>")
+					}
+				}, "json");
+			}
+		</script>
 	</body>
 </html>
