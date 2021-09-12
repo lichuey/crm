@@ -6,6 +6,7 @@ import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 /**
  * 顾客实体类
@@ -30,4 +31,6 @@ public class Customer {
     private String description;
     private String address;
 
+    //客户备注
+    private List<CustomerRemark> customerRemarkList;
 }

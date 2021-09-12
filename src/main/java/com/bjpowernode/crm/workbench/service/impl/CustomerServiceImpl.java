@@ -9,7 +9,9 @@ import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Customer;
+import com.bjpowernode.crm.workbench.bean.CustomerRemark;
 import com.bjpowernode.crm.workbench.mapper.CustomerMapper;
+import com.bjpowernode.crm.workbench.mapper.CustomerRemarkMapper;
 import com.bjpowernode.crm.workbench.service.CustomerService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CustomerRemarkMapper customerRemarkMapper;
 
     //条件查询
     @Override
@@ -140,5 +145,24 @@ public class CustomerServiceImpl implements CustomerService {
         if (count == 0) {
             throw new CrmException(CrmEnum.CUSTOMER_DELETE_FALSE);
         }
+    }
+
+    //通过id查询客户
+    @Override
+    public Customer queryDetail(String id) {
+        //查询客户
+        Customer customer = customerMapper.selectByPrimaryKey(id);
+
+        //处理owner
+        User user = userMapper.selectByPrimaryKey(customer.getOwner());
+        customer.setOwner(user.getName());
+
+        //查询客户备注
+        CustomerRemark customerRemark = new CustomerRemark();
+        customerRemark.setCustomerId(customer.getId());
+        List<CustomerRemark> customerRemarks = customerRemarkMapper.select(customerRemark);
+        customer.setCustomerRemarkList(customerRemarks);
+
+        return customer;
     }
 }

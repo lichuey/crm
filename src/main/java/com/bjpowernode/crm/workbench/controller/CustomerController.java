@@ -76,4 +76,10 @@ public class CustomerController {
         }
         return resultVo;
     }
+
+    //通过id查询客户
+    @RequestMapping("/workbench/customer/queryDetail")
+    public Customer queryDetail(String id) {
+        return customerService.queryDetail(id);
+    }
 }

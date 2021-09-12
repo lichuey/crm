@@ -369,7 +369,7 @@
 						var customer = customerList.list[i];
 						$("#customerTbody").append("<tr>\n" +
 								"\t\t\t\t\t\t\t\t<td><input class='son' type=\"checkbox\" onclick='clickSon()' value='"+ customer.id +"' /></td>\n" +
-								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + customer.name + "</a></td>\n" +
+								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" href='toView/workbench/customer/detail?id=" + customer.id + "'>" + customer.name + "</a></td>\n" +
 								"\t\t\t\t\t\t\t\t<td>" + customer.owner + "</td>\n" +
 								"\t\t\t\t\t\t\t\t<td>" + customer.phone + "</td>\n" +
 								"\t\t\t\t\t\t\t\t<td>" + customer.website + "</td>\n" +
