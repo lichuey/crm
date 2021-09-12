@@ -1,6 +1,10 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.bjpowernode.crm.base.exception.CrmEnum;
+import com.bjpowernode.crm.base.exception.CrmException;
+import com.bjpowernode.crm.base.util.DateTimeUtil;
+import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Customer;
@@ -47,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
                 ids.add(user.getId());
             }
 
-            //通过id查询所有满足条件的顾客
+            //通过id查询所有满足条件的客户
             criteria.andIn("owner", ids);
         }
 
@@ -75,5 +79,23 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         return customers;
+    }
+
+    //查询所有用户
+    @Override
+    public List<User> queryUser() {
+        return userMapper.selectAll();
+    }
+
+    //保存更新客户
+    @Override
+    public void saveOrUpdate(Customer customer, User user) {
+        customer.setId(UUIDUtil.uuid());
+        customer.setCreateBy(user.getName());
+        customer.setCreateTime(DateTimeUtil.getSysTime());
+        int count = customerMapper.insertSelective(customer);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CUSTOMER_SAVE_FALSE);
+        }
     }
 }

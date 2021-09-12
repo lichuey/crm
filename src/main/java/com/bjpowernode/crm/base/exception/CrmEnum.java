@@ -13,7 +13,8 @@ public enum CrmEnum {
     USER_UPDATE_PASSWORD("001-002-004","用户更新密码失败"),
     ACTIVITY_SAVE_FALSE("002-001-001","活动保存失败"),
     ACTIVITY_UPDATE_FALSE("002-002-001", "活动更新失败"),
-    ACTIVITY_DELETE_FALSE("002-003-001", "活动删除失败");
+    ACTIVITY_DELETE_FALSE("002-003-001", "活动删除失败"),
+    CUSTOMER_SAVE_FALSE("003-001-001", "客户保存失败");
 
     private String code;//业务码
     private String message;//错误消息

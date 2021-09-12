@@ -42,37 +42,37 @@
 						<h4 class="modal-title" id="myModalLabel1">创建客户</h4>
 					</div>
 					<div class="modal-body">
-						<form class="form-horizontal" role="form">
+						<form class="form-horizontal" id="saveForm" role="form">
 						
 							<div class="form-group">
 								<label for="create-customerOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="create-customerOwner">
-									  <option>zhangsan</option>
+									<select class="form-control" name="owner" id="create-customerOwner">
+									  <%--<option>zhangsan</option>
 									  <option>lisi</option>
-									  <option>wangwu</option>
+									  <option>wangwu</option>--%>
 									</select>
 								</div>
 								<label for="create-customerName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-customerName">
+									<input type="text" class="form-control" name="name" id="create-customerName">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="create-website" class="col-sm-2 control-label">公司网站</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-website">
+									<input type="text" class="form-control" name="website" id="create-website">
 								</div>
 								<label for="create-phone" class="col-sm-2 control-label">公司座机</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-phone">
+									<input type="text" class="form-control" name="phone" id="create-phone">
 								</div>
 							</div>
 							<div class="form-group">
 								<label for="create-describe" class="col-sm-2 control-label">描述</label>
 								<div class="col-sm-10" style="width: 81%;">
-									<textarea class="form-control" rows="3" id="create-describe"></textarea>
+									<textarea class="form-control" rows="3" name="description" id="create-describe"></textarea>
 								</div>
 							</div>
 							<div style="height: 1px; width: 103%; background-color: #D5D5D5; left: -13px; position: relative;"></div>
@@ -81,13 +81,13 @@
 								<div class="form-group">
 									<label for="create-contactSummary" class="col-sm-2 control-label">联系纪要</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="3" id="create-contactSummary"></textarea>
+										<textarea class="form-control" rows="3" name="contactSummary" id="create-contactSummary"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 									<div class="col-sm-10" style="width: 300px;">
-										<input type="text" class="form-control" id="create-nextContactTime">
+										<input type="text" class="form-control" name="nextContactTime" id="create-nextContactTime">
 									</div>
 								</div>
 							</div>
@@ -98,7 +98,7 @@
 								<div class="form-group">
 									<label for="create-address1" class="col-sm-2 control-label">详细地址</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="1" id="create-address1"></textarea>
+										<textarea class="form-control" rows="1" name="address" id="create-address1"></textarea>
 									</div>
 								</div>
 							</div>
@@ -107,7 +107,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+						<button type="button" onclick="saveOrUpdate()" class="btn btn-primary" data-dismiss="modal">保存</button>
 					</div>
 				</div>
 			</div>
@@ -388,10 +388,39 @@
 				}, "json");
 			}
 
-			//查询顾客
+			//查询客户
 			function queryCustomer() {
 				refresh(1, 2);
 			}
+
+			//查询所有用户
+			$.get("workbench/customer/queryUser", function (data) {
+				var userList = data;
+				for (var i in userList) {
+					//用户
+					var user = userList[i];
+					$("#create-customerOwner").append("<option value='" + user.id + "'>" + user.name + "</option>");
+				}
+			}, "json");
+
+			//保存更新客户
+			function saveOrUpdate() {
+				$.post("workbench/customer/saveOrUpdate", $("#saveForm").serialize()
+						, function (data) {
+							//data:resultVo
+							if (data.resOK) {
+								alert(data.message);
+
+								//刷新数据
+								refresh(1, 2);
+
+								//重置表单
+								document.querySelectorAll("#saveForm").reset();
+							}
+						}, "json");
+			}
+
+
 		</script>
 	</body>
 </html>
