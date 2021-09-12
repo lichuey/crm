@@ -21,7 +21,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<%--日历插件--%>
 		<script type="text/javascript" src="/crm/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 		<script type="text/javascript" src="/crm/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
-		
+		<%--弹出框--%>
+		<script type="text/javascript" src="/crm/jquery/layer/layer.js"></script>
 		<script type="text/javascript">
 		
 			$(function(){
@@ -50,20 +51,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<h4 class="modal-title" id="myModalLabelx">创建联系人</h4>
 					</div>
 					<div class="modal-body">
-						<form class="form-horizontal" role="form">
+						<form class="form-horizontal" role="form" id="saveForm">
 						
 							<div class="form-group">
 								<label for="create-contactsOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="create-contactsOwner">
-									  <option>zhangsan</option>
+									<select class="form-control" id="create-contactsOwner" name="owner">
+									  <%--<option>zhangsan</option>
 									  <option>lisi</option>
-									  <option>wangwu</option>
+									  <option>wangwu</option>--%>
 									</select>
 								</div>
 								<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="create-clueSource">
+									<select class="form-control" id="create-clueSource" name="source">
 									  <option></option>
 									  <option>广告</option>
 									  <option>推销电话</option>
@@ -86,11 +87,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label for="create-surname" class="col-sm-2 control-label">姓名<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-surname">
+									<input type="text" class="form-control" id="create-surname" name="fullname">
 								</div>
 								<label for="create-call" class="col-sm-2 control-label">称呼</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="create-call">
+									<select class="form-control" id="create-call" name="appellation">
 									  <option></option>
 									  <option>先生</option>
 									  <option>夫人</option>
@@ -105,36 +106,36 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label for="create-job" class="col-sm-2 control-label">职位</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-job">
+									<input type="text" class="form-control" id="create-job" name="job">
 								</div>
 								<label for="create-mphone" class="col-sm-2 control-label">手机</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-mphone">
+									<input type="text" class="form-control" id="create-mphone" name="mphone">
 								</div>
 							</div>
 							
 							<div class="form-group" style="position: relative;">
 								<label for="create-email" class="col-sm-2 control-label">邮箱</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-email">
+									<input type="text" class="form-control" id="create-email" name="email">
 								</div>
 								<label for="create-birth" class="col-sm-2 control-label">生日</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-birth">
+									<input type="text" class="form-control" id="create-birth" name="birth">
 								</div>
 							</div>
 							
 							<div class="form-group" style="position: relative;">
 								<label for="create-customerName" class="col-sm-2 control-label">客户名称</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
+									<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建" name="customerId">
 								</div>
 							</div>
 							
 							<div class="form-group" style="position: relative;">
 								<label for="create-describe" class="col-sm-2 control-label">描述</label>
 								<div class="col-sm-10" style="width: 81%;">
-									<textarea class="form-control" rows="3" id="create-describe"></textarea>
+									<textarea class="form-control" rows="3" id="create-describe" name="description"></textarea>
 								</div>
 							</div>
 							
@@ -144,13 +145,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="form-group">
 									<label for="create-contactSummary1" class="col-sm-2 control-label">联系纪要</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="3" id="create-contactSummary1"></textarea>
+										<textarea class="form-control" rows="3" id="create-contactSummary1" name="contactSummary"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="create-nextContactTime1" class="col-sm-2 control-label">下次联系时间</label>
 									<div class="col-sm-10" style="width: 300px;">
-										<input type="text" class="form-control" id="create-nextContactTime1">
+										<input type="text" class="form-control" id="create-nextContactTime1" name="nextContactTime">
 									</div>
 								</div>
 							</div>
@@ -161,7 +162,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="form-group">
 									<label for="edit-address1" class="col-sm-2 control-label">详细地址</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="1" id="edit-address1">北京大兴区大族企业湾</textarea>
+										<textarea class="form-control" rows="1" id="edit-address1" name="address">北京大兴区大族企业湾</textarea>
 									</div>
 								</div>
 							</div>
@@ -170,7 +171,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveOrUpdate($(this).text())">保存</button>
 					</div>
 				</div>
 			</div>
@@ -187,20 +188,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<h4 class="modal-title" id="myModalLabel1">修改联系人</h4>
 					</div>
 					<div class="modal-body">
-						<form class="form-horizontal" role="form">
+						<form class="form-horizontal" role="form" id="editForm">
 						
 							<div class="form-group">
 								<label for="edit-contactsOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="edit-contactsOwner">
-									  <option selected>zhangsan</option>
+									<select class="form-control" id="edit-contactsOwner" name="owner">
+									  <%--<option selected>zhangsan</option>
 									  <option>lisi</option>
-									  <option>wangwu</option>
+									  <option>wangwu</option>--%>
 									</select>
 								</div>
 								<label for="edit-clueSource1" class="col-sm-2 control-label">来源</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="edit-clueSource1">
+									<select class="form-control" id="edit-clueSource1" name="source">
 									  <option></option>
 									  <option selected>广告</option>
 									  <option>推销电话</option>
@@ -223,11 +224,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label for="edit-surname" class="col-sm-2 control-label">姓名<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-surname" value="李四">
+									<input type="text" class="form-control" id="edit-surname" value="李四" name="fullname">
 								</div>
 								<label for="edit-call" class="col-sm-2 control-label">称呼</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="edit-call">
+									<select class="form-control" id="edit-call" name="appellation">
 									  <option></option>
 									  <option selected>先生</option>
 									  <option>夫人</option>
@@ -241,36 +242,36 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label for="edit-job" class="col-sm-2 control-label">职位</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-job" value="CTO">
+									<input type="text" class="form-control" id="edit-job" value="CTO" name="job">
 								</div>
 								<label for="edit-mphone" class="col-sm-2 control-label">手机</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-mphone" value="12345678901">
+									<input type="text" class="form-control" id="edit-mphone" value="12345678901" name="mphone">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="edit-email" class="col-sm-2 control-label">邮箱</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-email" value="lisi@bjpowernode.com">
+									<input type="text" class="form-control" id="edit-email" value="lisi@bjpowernode.com" name="email">
 								</div>
 								<label for="edit-birth" class="col-sm-2 control-label">生日</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-birth">
+									<input type="text" class="form-control" id="edit-birth" name="birth">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="edit-customerName" class="col-sm-2 control-label">客户名称</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-customerName" placeholder="支持自动补全，输入客户不存在则新建" value="动力节点">
+									<input type="text" class="form-control" id="edit-customerName" placeholder="支持自动补全，输入客户不存在则新建" value="动力节点" name="customerId">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="edit-describe" class="col-sm-2 control-label">描述</label>
 								<div class="col-sm-10" style="width: 81%;">
-									<textarea class="form-control" rows="3" id="edit-describe">这是一条线索的描述信息</textarea>
+									<textarea class="form-control" rows="3" id="edit-describe" name="description">这是一条线索的描述信息</textarea>
 								</div>
 							</div>
 							
@@ -280,13 +281,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="form-group">
 									<label for="create-contactSummary" class="col-sm-2 control-label">联系纪要</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="3" id="create-contactSummary"></textarea>
+										<textarea class="form-control" rows="3" id="create-contactSummary" name="contactSummary"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 									<div class="col-sm-10" style="width: 300px;">
-										<input type="text" class="form-control" id="create-nextContactTime">
+										<input type="text" class="form-control" id="create-nextContactTime" name="nextContactTime">
 									</div>
 								</div>
 							</div>
@@ -297,16 +298,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="form-group">
 									<label for="edit-address2" class="col-sm-2 control-label">详细地址</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="1" id="edit-address2">北京大兴区大族企业湾</textarea>
+										<textarea class="form-control" rows="1" id="edit-address2" name="address">北京大兴区大族企业湾</textarea>
 									</div>
 								</div>
 							</div>
+							<input type="hidden" id="id" name="id" />
 						</form>
 						
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveOrUpdate($(this).text())">更新</button>
 					</div>
 				</div>
 			</div>
@@ -391,8 +393,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 10px;">
 					<div class="btn-group" style="position: relative; top: 18%;">
 					  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createContactsModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-					  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editContactsModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-					  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+					  <button type="button" class="btn btn-default" data-toggle="modal" onclick="openEditModal()"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+					  <button type="button" class="btn btn-danger" onclick="deleteContacts()"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 					</div>
 					
 					
@@ -401,7 +403,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<table class="table table-hover">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox" /></td>
+								<td><input type="checkbox" id="father" /></td>
 								<td>姓名</td>
 								<td>客户名称</td>
 								<td>所有者</td>
@@ -499,8 +501,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				for (var i = 0; i < data.list.length; i++) {
 					var contacts = data.list[i];
 					$('#contactsTbody').append("<tr>\n" +
-							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
-							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + contacts.fullname + "</a></td>\n" +
+							"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" value="+ contacts.id +" class='son' onclick='abc()' '/></td>\n" +
+							"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" href='toView/workbench/contacts/detail?id="+contacts.id+"'>" + contacts.fullname + "</a></td>\n" +
 							"\t\t\t\t\t\t\t\t<td>" + contacts.customerId + "</td>\n" +
 							"\t\t\t\t\t\t\t\t<td>" + contacts.owner + "</td>\n" +
 							"\t\t\t\t\t\t\t\t<td>" + contacts.source + "</td>\n" +
@@ -558,6 +560,149 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			clearBtn : true,
 			pickerPosition: "bottom-left"
 		});
+
+		//异步查询所有用户信息
+		$.get("workbench/contacts/queryUsers",function (data) {
+			//data:List<User>
+			//清空内容
+			$('#create-contactsOwner').html("");
+			for(var i in data){
+				var user = data[i];
+				$('#create-contactsOwner').append("<option value="+user.id+">"+user.name+"</option>");
+
+			}
+		},'json');
+
+		//异步保存或者修改市场活动 bind:绑定所有事件 参数1:绑定的事件名称 参数2:触发的函数
+		function saveOrUpdate(text){
+			var form;
+			if("保存" == text){
+				form = $('#saveForm').serialize();
+			}else if("更新" == text){
+				form =  $('#editForm').serialize();
+			}
+
+			$.post("workbench/contacts/saveOrUpdate",form,function (data) {
+				//data:resultVo
+				if(data.resOK){
+					alert(data.message);
+
+					//手动刷新数据
+					refresh(1,3);
+
+					//重置表单 jquery没有对应的函数，原生态的js有
+					//document.getElementById("form").reset();
+					//html5才有
+					document.querySelector("#saveForm").reset();
+				}
+			},'json');
+		}
+
+		//全选、反选功能
+		$('#father').click(function () {
+			//方式二
+			$('.son').prop('checked',$(this).prop('checked'));
+		});
+
+		function abc() {
+			//获取勾中的son的个数
+			var checkedLength = $('.son:checked').length;
+			//获取所有son的个数
+			var length = $('.son').length;
+			if(checkedLength == length){
+				$('#father').prop('checked',true);
+			}else{
+				$('#father').prop('checked',false);
+			}
+		}
+
+		//点击修改按钮的js判断 勾中一条记录
+		function openEditModal() {
+			//获取勾中的son的个数
+			var checkedLength = $('.son:checked').length;
+			if(checkedLength > 1){
+				alert("只能选中一条记录");
+			}else if(checkedLength === 0){
+				alert("至少一条记录");
+			}else{
+				//弹出模态窗口 显示:show 隐藏:hide
+				$('#editContactsModal').modal("show");
+
+				//发送异步请求，根据主键查询市场活动信息
+
+				//jquery-->js arr[0],arr.get(0) js-->jquery $(a)
+				//$('.son:checked')[0].value;
+				var id = $($('.son:checked')[0]).val();
+				$.get("workbench/contacts/queryById",{'id':id},function (data) {
+					var contacts = data;
+					//data:Contacts owner
+					//异步查询所有者信息
+					$.get("workbench/contacts/queryUsers",function (data) {
+						//data:List<User>
+						//清空内容
+						$('#edit-contactsOwner').html("");
+						for(var i in data){
+							var user = data[i];
+							if(contacts.owner == user.id){
+								$('#edit-contactsOwner').append("<option selected value="+user.id+">"+user.name+"</option>");
+							}else{
+								$('#edit-contactsOwner').append("<option value="+user.id+">"+user.name+"</option>");
+							}
+						}
+
+						//设置模态窗口中的内容
+						$('#edit-clueSource1').val(contacts.source);
+						$('#edit-surname').val(contacts.fullname);
+						$('#edit-call').val(contacts.appellation);
+						$('#edit-job').val(contacts.job);
+						$('#edit-mphone').val(contacts.mphone);
+						$('#edit-email').val(contacts.email);
+						$('#edit-birth').val(contacts.birth);
+						$('#edit-customerName').val(contacts.customerId);
+						$('#edit-describe').val(contacts.description);
+						$('#edit-contactSummary').val(contacts.contactSummary);
+						$('#edit-nextContactTime').val(contacts.nextContactTime);
+						$('#edit-address2').val(contacts.address);
+						//把市场活动主键设置到隐藏域中
+						$('#id').val(contacts.id);
+					},'json');
+
+				},'json');
+			}
+		}
+
+		//点击删除按钮，删除联系人
+		function deleteContacts() {
+			//获取勾中的son的个数
+			var length = $('.son:checked').length;
+			if(length == 0){
+				alert("至少选中一条记录")
+			}else{
+				layer.alert("删除选中的"+length+"条数据吗？", {
+					time: 0 //不自动关闭
+					,btn: ['确定', '取消']
+					,yes: function(index){
+						//index:按钮的索引
+						layer.close(index);
+
+						var ids = [];
+						$('.son:checked').each(function () {
+							//push:向数组中放入元素
+							ids.push($(this).val());
+						});
+						//join:把数组中的内容按指定的分隔符拼接成字符串 默认的分隔符就是,
+						$.post("workbench/contacts/deleteBatch",{'ids':ids.join()},function (data) {
+							//data:resultVo
+							if(data.resOK){
+								alert(data.message);
+								refresh(1,3);
+							}
+						},'json');
+
+					}
+				});
+			}
+		}
 
 	</script>
 </html>

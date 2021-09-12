@@ -16,7 +16,10 @@ public enum CrmEnum {
     ACTIVITY_DELETE_FALSE("002-003-001", "活动删除失败"),
     CUSTOMER_SAVE_FALSE("003-001-001", "客户保存失败"),
     CUSTOMER_UPDATE_FALSE("003-002-001", "客户更新失败"),
-    CUSTOMER_DELETE_FALSE("003-003-001", "客户删除失败");
+    CUSTOMER_DELETE_FALSE("003-003-001", "客户删除失败"),
+    CONTACTS_SAVEF_FALSE("004-001-001", "联系人保存失败"),
+    CONTACTS_UPDATE_FALSE("004-002-001", "联系人更新失败"),
+    CONTACTS_DELETE_FALSE("004-003-001", "联系人删除失败");
 
     private String code;//业务码
     private String message;//错误消息

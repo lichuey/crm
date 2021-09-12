@@ -1,10 +1,17 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.bjpowernode.crm.base.bean.ResultVo;
+import com.bjpowernode.crm.base.exception.CrmEnum;
+import com.bjpowernode.crm.base.exception.CrmException;
+import com.bjpowernode.crm.base.util.DateTimeUtil;
+import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
+import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Contacts;
 import com.bjpowernode.crm.workbench.bean.Customer;
+import com.bjpowernode.crm.workbench.mapper.ActivityMapper;
 import com.bjpowernode.crm.workbench.mapper.ContactsMapper;
 import com.bjpowernode.crm.workbench.mapper.CustomerMapper;
 import com.bjpowernode.crm.workbench.service.ContactsService;
@@ -14,6 +21,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -93,21 +101,74 @@ public class ContactsServiceImpl implements ContactsService {
         example.setOrderByClause("createTime desc");
         List<Contacts> contactsList = contactsMapper.selectByExample(example);
 
-        for (Contacts Contacts : contactsList) {
+        for (Contacts contacts1 : contactsList) {
             //处理owner
-            String owner = Contacts.getOwner();
+            String owner = contacts1.getOwner();
             User user = userMapper.selectByPrimaryKey(owner);
 
-            Contacts.setOwner(user.getName());
+            contacts1.setOwner(user.getName());
 
             //处理customerId
-            String customerId = Contacts.getCustomerId();
+            String customerId = contacts1.getCustomerId();
             Customer customer = customerMapper.selectByPrimaryKey(customerId);
-            Contacts.setCustomerId(customer.getName());
+            contacts1.setCustomerId(customer.getName());
         }
 
         return contactsList;
     }
 
+
+    @Override
+    public List<User> queryUsers() {
+        return userMapper.selectAll();
+    }
+
+
+    @Override
+    public ResultVo saveOrUpdate(Contacts contacts, User user) {
+        ResultVo resultVo = new ResultVo();
+        //先判断修改还是添加
+        if(contacts.getId() == null){
+
+            contacts.setId(UUIDUtil.uuid());
+            contacts.setCreateBy(user.getName());
+            contacts.setCreateTime(DateTimeUtil.getSysTime());
+            int count = contactsMapper.insertSelective(contacts);
+            if(count == 0){
+                throw new CrmException(CrmEnum.CONTACTS_SAVEF_FALSE);
+            }
+            //添加
+            resultVo.setMessage("添加联系人成功");
+        }else {
+            //修改
+            contacts.setEditBy(user.getName());
+            contacts.setEditTime(DateTimeUtil.getSysTime());
+
+            int count = contactsMapper.updateByPrimaryKeySelective(contacts);
+            if(count == 0){
+                throw new CrmException(CrmEnum.CONTACTS_UPDATE_FALSE);
+            }
+            resultVo.setMessage("修改联系人成功");
+
+        }
+        resultVo.setResOK(true);
+        return resultVo;
+    }
+
+    @Override
+    public Contacts queryById(String id) {
+        return contactsMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public void deleteBatch(String ids) {
+        String[] split = ids.split(",");
+
+        //把split转换成List集合
+        List<String> list = Arrays.asList(split);
+        Example example = new Example(Activity.class);
+        example.createCriteria().andIn("id", list);
+        contactsMapper.deleteByExample(example);
+    }
 
 }
