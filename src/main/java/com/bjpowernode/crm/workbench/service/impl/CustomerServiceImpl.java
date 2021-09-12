@@ -1,6 +1,7 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmEnum;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.DateTimeUtil;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.persistence.Id;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -89,13 +92,53 @@ public class CustomerServiceImpl implements CustomerService {
 
     //保存更新客户
     @Override
-    public void saveOrUpdate(Customer customer, User user) {
-        customer.setId(UUIDUtil.uuid());
-        customer.setCreateBy(user.getName());
-        customer.setCreateTime(DateTimeUtil.getSysTime());
-        int count = customerMapper.insertSelective(customer);
+    public ResultVo saveOrUpdate(Customer customer, User user) {
+        ResultVo resultVo = new ResultVo();
+        if (customer.getId() == null) {
+            customer.setId(UUIDUtil.uuid());
+            customer.setCreateBy(user.getName());
+            customer.setCreateTime(DateTimeUtil.getSysTime());
+            int count = customerMapper.insertSelective(customer);
+            if (count == 0) {
+                throw new CrmException(CrmEnum.CUSTOMER_SAVE_FALSE);
+            }
+            resultVo.setResOK(true);
+            resultVo.setMessage("客户保存成功");
+        } else {
+            customer.setEditBy(user.getName());
+            customer.setEditTime(DateTimeUtil.getSysTime());
+            int count = customerMapper.updateByPrimaryKeySelective(customer);
+            if (count == 0) {
+                throw new CrmException(CrmEnum.CUSTOMER_UPDATE_FALSE);
+            }
+            resultVo.setResOK(true);
+            resultVo.setMessage("客户更新成功");
+        }
+        return resultVo;
+    }
+
+    //获取所有客户数据
+    @Override
+    public Customer queryCustomerById(String id) {
+        return customerMapper.selectByPrimaryKey(id);
+    }
+
+    //获取所有用户
+    @Override
+    public List<User> queryAllUser() {
+        return userMapper.selectAll();
+    }
+
+    //删除客户
+    @Override
+    public void deleteCustomerById(String ids) {
+        String[] idArr = ids.split(",");
+        List<String> idList = Arrays.asList(idArr);
+        Example example = new Example(Customer.class);
+        example.createCriteria().andIn("id", idList);
+        int count = customerMapper.deleteByExample(example);
         if (count == 0) {
-            throw new CrmException(CrmEnum.CUSTOMER_SAVE_FALSE);
+            throw new CrmException(CrmEnum.CUSTOMER_DELETE_FALSE);
         }
     }
 }

@@ -44,9 +44,33 @@ public class CustomerController {
         ResultVo resultVo = new ResultVo();
         try {
             User user = CommonUtil.getCurrentUser(session);
-            customerService.saveOrUpdate(customer, user);
+            resultVo = customerService.saveOrUpdate(customer, user);
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //获取所有客户数据
+    @RequestMapping("/workbench/customer/queryCustomerById")
+    public Customer queryCustomerById(String id) {
+        return customerService.queryCustomerById(id);
+    }
+
+    //获取所有用户
+    @RequestMapping("/workbench/customer/queryAllUser")
+    public List<User> queryAllUser() {
+        return customerService.queryAllUser();
+    }
+
+    //删除客户
+    @RequestMapping("/workbench/customer/deleteCustomerById")
+    public ResultVo deleteCustomerById(String ids) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            customerService.deleteCustomerById(ids);
             resultVo.setResOK(true);
-            resultVo.setMessage("客户更新成功");
+            resultVo.setMessage("客户删除成功");
         } catch (CrmException e) {
             resultVo.setMessage(e.getMessage());
         }

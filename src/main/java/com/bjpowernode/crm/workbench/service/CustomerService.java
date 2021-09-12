@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.workbench.service;
 
+import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Customer;
 
@@ -14,5 +15,14 @@ public interface CustomerService {
     List<User> queryUser();
 
     //保存更新客户
-    void saveOrUpdate(Customer customer, User user);
+    ResultVo saveOrUpdate(Customer customer, User user);
+
+    //获取所有客户数据
+    Customer queryCustomerById(String id);
+
+    //获取所有用户
+    List<User> queryAllUser();
+
+    //删除客户
+    void deleteCustomerById(String ids);
 }

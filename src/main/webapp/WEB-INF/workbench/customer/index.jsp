@@ -14,6 +14,8 @@
 		<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 		<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+		<%--layer--%>
+		<script type="text/javascript" src="jquery/layer/layer.js"></script>
 		
 		<script type="text/javascript">
 		
@@ -107,7 +109,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" onclick="saveOrUpdate()" class="btn btn-primary" data-dismiss="modal">保存</button>
+						<button type="button" onclick="saveOrUpdate($(this).text())" id="saveCustomer" class="btn btn-primary" data-dismiss="modal">保存</button>
 					</div>
 				</div>
 			</div>
@@ -124,38 +126,42 @@
 						<h4 class="modal-title" id="myModalLabel">修改客户</h4>
 					</div>
 					<div class="modal-body">
-						<form class="form-horizontal" role="form">
+						<form class="form-horizontal" id="updateForm" role="form">
 						
 							<div class="form-group">
 								<label for="edit-customerOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<select class="form-control" id="edit-customerOwner">
+									<select class="form-control" name="owner" id="edit-customerOwner">
+									  <%--
 									  <option>zhangsan</option>
 									  <option>lisi</option>
 									  <option>wangwu</option>
+									  --%>
 									</select>
 								</div>
 								<label for="edit-customerName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-customerName" value="动力节点">
+									<%--隐藏域，客户id--%>
+									<input type="hidden" name="id" id="id">
+									<input type="text" class="form-control" name="name" id="edit-customerName">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="edit-website" class="col-sm-2 control-label">公司网站</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-website" value="http://www.bjpowernode.com">
+									<input type="text" class="form-control" name="website" id="edit-website">
 								</div>
 								<label for="edit-phone" class="col-sm-2 control-label">公司座机</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-phone" value="010-84846003">
+									<input type="text" class="form-control" name="phone" id="edit-phone">
 								</div>
 							</div>
 							
 							<div class="form-group">
 								<label for="edit-describe" class="col-sm-2 control-label">描述</label>
 								<div class="col-sm-10" style="width: 81%;">
-									<textarea class="form-control" rows="3" id="edit-describe"></textarea>
+									<textarea class="form-control" rows="3" name="description" id="edit-describe"></textarea>
 								</div>
 							</div>
 							
@@ -165,13 +171,13 @@
 								<div class="form-group">
 									<label for="create-contactSummary1" class="col-sm-2 control-label">联系纪要</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="3" id="create-contactSummary1"></textarea>
+										<textarea class="form-control" rows="3" name="contactSummary" id="create-contactSummary1"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
 									<label for="create-nextContactTime2" class="col-sm-2 control-label">下次联系时间</label>
 									<div class="col-sm-10" style="width: 300px;">
-										<input type="text" class="form-control" id="create-nextContactTime2">
+										<input type="text" class="form-control" name="nextContactTime" id="create-nextContactTime2">
 									</div>
 								</div>
 							</div>
@@ -182,7 +188,7 @@
 								<div class="form-group">
 									<label for="create-address" class="col-sm-2 control-label">详细地址</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="1" id="create-address">北京大兴大族企业湾</textarea>
+										<textarea class="form-control" rows="1" name="address" id="create-address"></textarea>
 									</div>
 								</div>
 							</div>
@@ -191,7 +197,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+						<button type="button" onclick="saveOrUpdate($(this).text())" class="btn btn-primary" data-dismiss="modal">更新</button>
 					</div>
 				</div>
 			</div>
@@ -250,8 +256,8 @@
 				<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 					<div class="btn-group" style="position: relative; top: 18%;">
 					  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCustomerModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-					  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editCustomerModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-					  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+					  <button type="button" class="btn btn-default" onclick="showModel()" data-target="#editCustomerModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+					  <button type="button" class="btn btn-danger" onclick="deleteCustomer()"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 					</div>
 					
 				</div>
@@ -259,7 +265,7 @@
 					<table class="table table-hover">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox" /></td>
+								<td><input id="father" type="checkbox" /></td>
 								<td>名称</td>
 								<td>所有者</td>
 								<td>公司座机</td>
@@ -362,7 +368,7 @@
 					for (var i = 0; i < customerList.list.length; i++) {
 						var customer = customerList.list[i];
 						$("#customerTbody").append("<tr>\n" +
-								"\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" /></td>\n" +
+								"\t\t\t\t\t\t\t\t<td><input class='son' type=\"checkbox\" onclick='clickSon()' value='"+ customer.id +"' /></td>\n" +
 								"\t\t\t\t\t\t\t\t<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='detail.html';\">" + customer.name + "</a></td>\n" +
 								"\t\t\t\t\t\t\t\t<td>" + customer.owner + "</td>\n" +
 								"\t\t\t\t\t\t\t\t<td>" + customer.phone + "</td>\n" +
@@ -404,23 +410,122 @@
 			}, "json");
 
 			//保存更新客户
-			function saveOrUpdate() {
-				$.post("workbench/customer/saveOrUpdate", $("#saveForm").serialize()
-						, function (data) {
-							//data:resultVo
-							if (data.resOK) {
-								alert(data.message);
+			function saveOrUpdate(text) {
+				var form;
+				if ("保存" == text) {
+					form = $("#saveForm").serialize();
+				} else if ("更新" == text) {
+					form = $("#updateForm").serialize();
+				}
+				$.post("workbench/customer/saveOrUpdate", form, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
 
-								//刷新数据
-								refresh(1, 2);
+						//刷新数据
+						refresh(1, 2);
 
-								//重置表单
-								document.querySelectorAll("#saveForm").reset();
-							}
-						}, "json");
+						//重置表单
+						document.querySelectorAll("#saveForm").reset();
+					}
+				}, "json");
+			}
+			
+			//father被选中
+			$("#father").click(function () {
+				$(".son").prop("checked",$(this).prop("checked"))
+			});
+
+			//son被选中
+			function clickSon(){
+				var checkedLength = $(".son:checked").length;
+				var length = $(".son").length;
+				if (checkedLength == length) {
+					$("#father").prop("checked", true);
+				} else {
+					$("#father").prop("checked", false);
+				}
 			}
 
+			//展现模态框
+			function showModel() {
+				var checkedLength = $(".son:checked").length;
+				if (checkedLength === 0) {
+					alert("至少选择一个");
+				} else if (checkedLength > 1) {
+					alert("选择不能多于一个");
+				} else {
+					//展现模态框
+					$("#editCustomerModal").modal("show");
 
+					//获取选中客户的id
+					var id = $($(".son:checked")[0]).val();
+					//异步获取所有客户数据
+					$.get("workbench/customer/queryCustomerById", {
+						"id": id
+					}, function (data) {
+						//data:Customer
+						var customer = data;
+						//给模态框中数据赋值
+						$("#edit-customerName").val(customer.name);
+						$("#edit-website").val(customer.website);
+						$("#edit-phone").val(customer.phone);
+						$("#edit-describe").val(customer.description);
+						$("#create-contactSummary1").val(customer.contactSummary);
+						$("#create-nextContactTime2").val(customer.nextContactTime);
+						$("#create-address").val(customer.address);
+						//把客户的id设置到隐藏域中
+						$("#id").val(customer.id);
+						//查询所有owner
+						$.get("workbench/customer/queryAllUser", function (data) {
+							$("#edit-customerOwner").html("");
+							var userList = data;
+							for (var i = 0; i < userList.length; i++) {
+								var user = userList[i];
+								if (customer.owner == user.id) {
+									$("#edit-customerOwner").append("<option selected value='" + user.id + "'>" + user.name + "</option>\n");
+								} else {
+									$("#edit-customerOwner").append("<option value='" + user.id + "'>" + user.name + "</option>\n");
+								}
+							}
+						},"json");
+					}, "json");
+				}
+			}
+
+			//删除客户
+			function deleteCustomer() {
+				var checkedLength = $(".son:checked").length;
+				if (checkedLength === 0) {
+					alert("至少选择一个客户");
+				} else {
+					layer.alert('你确定删除这'+ checkedLength +'个客户吗？', {
+						time: 0 //不自动关闭
+						,btn: ['删除', '取消']
+						,yes: function(index){
+							layer.close(index);
+
+							var ids = [];
+							$(".son:checked").each(function () {
+								ids.push($(this).val());
+							});
+							//异步删除客户
+							$.post("workbench/customer/deleteCustomerById", {
+								"ids": ids.join()
+							}, function (data) {
+								//data:resultVo
+								if (data.resOK) {
+									alert(data.message);
+									refresh(1, 2);
+
+									//所有的选中都不选中
+									$("#father").prop("checked", false);
+								}
+							}, "json");
+						}
+					});
+				}
+			}
 		</script>
 	</body>
 </html>
