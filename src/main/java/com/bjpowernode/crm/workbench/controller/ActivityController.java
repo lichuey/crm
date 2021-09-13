@@ -3,7 +3,9 @@ package com.bjpowernode.crm.workbench.controller;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.CommonUtil;
+import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
+import com.bjpowernode.crm.workbench.bean.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.github.pagehelper.PageInfo;
@@ -118,5 +120,20 @@ public class ActivityController{
     @RequestMapping("/workbench/activity/selectDetail")
     public Activity selectDetail(String id) {
         return activityService.selectDetail(id);
+    }
+
+    //保存市场活动备注
+    @RequestMapping("/workbench/activity/saveActivityRemark")
+    public ResultVo saveActivityRemark(ActivityRemark activityRemark, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            User user = CommonUtil.getCurrentUser(session);
+            activityService.saveActivityRemark(activityRemark, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("活动备注保存成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
     }
 }

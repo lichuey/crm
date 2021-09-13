@@ -238,68 +238,96 @@
 					<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 					<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 						<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-						<button type="button" class="btn btn-primary">保存</button>
+						<button type="button" class="btn btn-primary" onclick="saveActivityRemark()">保存</button>
 					</p>
 				</form>
 			</div>
 		</div>
 		<div style="height: 200px;"></div>
 		<script>
-			//异步查询市场活动详情页的数据
-			$.get("workbench/activity/selectDetail",{
-				//活动id
-				"id" : "${id}"
-			},function (data) {
-				//data:activity
-				var activity = data;
-				$("#owner").html(activity.owner);
-				$("#name").html(activity.name);
-				$("#startDate").html(activity.startDate);
-				$("#endDate").html(activity.endDate);
-				$("#cost").html(activity.cost);
-				$("#createBy").html(activity.createBy);
-				$("#createTime").html(activity.createTime);
-				$("#editBy").html(activity.editBy);
-				$("#editTime").html(activity.editTime);
-				$("#description").html(activity.description);
 
-				//取出市场活动中的市场活动备注
-				var activityRemarkList = activity.activityRemarkList;
-				//遍历市场活动备注
-				for (var i = 0; i < activityRemarkList.length; i++) {
-					//第i个市场活动备注
-					var remark = activityRemarkList[i];
-					$("#remarkDiv").before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
-							"\t\t\t\t<img title=\"zhangsan\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">\n" +
-							"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
-							"\t\t\t\t\t<h5>" + remark.noteContent +"</h5>\n" +
-							"\t\t\t\t\t<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>"+ activity.name +"</b> <small style=\"color: gray;\"> "+ activity.createTime +" 由"+ activity.createBy +"</small>\n" +
-							"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
-							"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
-							"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
-							"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
-							"\t\t\t\t\t</div>\n" +
-							"\t\t\t\t</div>\n" +
-							"\t\t\t</div>");
+			refresh();
 
-					$(".remarkDiv").mouseover(function(){
-						$(this).children("div").children("div").show();
-					});
+			function refresh() {
+				//异步查询市场活动详情页的数据
+				$.get("workbench/activity/selectDetail",{
+					//活动id
+					"id" : "${id}"
+				},function (data) {
+					//data:activity
+					var activity = data;
+					$("#owner").html(activity.owner);
+					$("#name").html(activity.name);
+					$("#startDate").html(activity.startDate);
+					$("#endDate").html(activity.endDate);
+					$("#cost").html(activity.cost);
+					$("#createBy").html(activity.createBy);
+					$("#createTime").html(activity.createTime);
+					$("#editBy").html(activity.editBy);
+					$("#editTime").html(activity.editTime);
+					$("#description").html(activity.description);
 
-					$(".remarkDiv").mouseout(function(){
-						$(this).children("div").children("div").hide();
-					});
+					//删除备注div中的所有元素
+					$(".remarkDiv").remove();
 
-					$(".myHref").mouseover(function(){
-						$(this).children("span").css("color","red");
-					});
+					//取出市场活动中的市场活动备注
+					var activityRemarkList = activity.activityRemarkList;
+					//遍历市场活动备注
+					for (var i = 0; i < activityRemarkList.length; i++) {
+						//第i个市场活动备注
+						var remark = activityRemarkList[i];
+						$("#remarkDiv").before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
+								"\t\t\t\t<img title=\"zhangsan\" src='"+ remark.img +"' style=\"width: 30px; height:30px;\">\n" +
+								"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
+								"\t\t\t\t\t<h5>" + remark.noteContent +"</h5>\n" +
+								"\t\t\t\t\t<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>"+ activity.name +"</b> <small style=\"color: gray;\"> "+ activity.createTime +" 由"+ activity.createBy +"</small>\n" +
+								"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t</div>\n" +
+								"\t\t\t\t</div>\n" +
+								"\t\t\t</div>");
 
-					$(".myHref").mouseout(function(){
-						$(this).children("span").css("color","#E6E6E6");
-					});
-				}
+						$(".remarkDiv").mouseover(function(){
+							$(this).children("div").children("div").show();
+						});
 
-			},"json");
+						$(".remarkDiv").mouseout(function(){
+							$(this).children("div").children("div").hide();
+						});
+
+						$(".myHref").mouseover(function(){
+							$(this).children("span").css("color","red");
+						});
+
+						$(".myHref").mouseout(function(){
+							$(this).children("span").css("color","#E6E6E6");
+						});
+					}
+
+				},"json");
+			}
+
+			function saveActivityRemark() {
+				//异步保存活动备注
+				$.get("workbench/activity/saveActivityRemark", {
+					"noteContent": $("#remark").val(),
+					"activityId" : "${id}"
+				}, function (data) {
+					//data:ResultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						//清空文本域
+						$("#remark").val("");
+
+						//刷新数据
+						refresh();
+					}
+				}, "json");
+			}
+
 		</script>
 	</body>
 </html>

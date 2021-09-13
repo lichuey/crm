@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -192,5 +193,18 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setActivityRemarkList(activityRemarks);
 
         return activity;
+    }
+
+    //保存市场活动备注
+    @Override
+    public void saveActivityRemark(ActivityRemark activityRemark, User user) {
+        activityRemark.setId(UUIDUtil.uuid());
+        activityRemark.setCreateBy(user.getName());
+        activityRemark.setCreateTime(DateTimeUtil.getSysTime());
+        activityRemark.setImg(user.getImg());
+        int count = activityRemarkMapper.insertSelective(activityRemark);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_REMARK_SAVE_FALSE);
+        }
     }
 }
