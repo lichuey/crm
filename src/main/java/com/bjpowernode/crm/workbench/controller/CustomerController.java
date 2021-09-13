@@ -4,6 +4,7 @@ import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.CommonUtil;
 import com.bjpowernode.crm.settings.bean.User;
+import com.bjpowernode.crm.workbench.bean.CustomerRemark;
 import com.bjpowernode.crm.workbench.service.CustomerService;
 import com.bjpowernode.crm.workbench.bean.Customer;
 import com.github.pagehelper.PageInfo;
@@ -77,9 +78,53 @@ public class CustomerController {
         return resultVo;
     }
 
-    //通过id查询客户
+    //通过id查询客户备注
     @RequestMapping("/workbench/customer/queryDetail")
     public Customer queryDetail(String id) {
         return customerService.queryDetail(id);
+    }
+
+    //异步保存客户备注
+    @RequestMapping("/workbench/customer/saveCustomerRemark")
+    public ResultVo saveCustomerRemark(CustomerRemark customerRemark, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            customerService.saveCustomerRemark(customerRemark, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("客户保存成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //异步更新客户备注
+    @RequestMapping("/workbench/customer/updateCustomerRemark")
+    public ResultVo updateCustomerRemark(CustomerRemark customerRemark, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            customerService.updateCustomerRemark(customerRemark, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("客户更新成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //删除客户备注
+    @RequestMapping("/workbench/customer/deleteCustomerRemark")
+    public ResultVo deleteCustomerRemark(String id) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            customerService.deleteCustomerRemark(id);
+            resultVo.setResOK(true);
+            resultVo.setMessage("客户删除成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
     }
 }

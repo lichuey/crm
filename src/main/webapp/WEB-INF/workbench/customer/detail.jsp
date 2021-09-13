@@ -319,6 +319,37 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- 修改客户备注的模态窗口 -->
+		<div class="modal fade" id="editRemarkModal" role="dialog">
+			<%-- 备注的id --%>
+			<input type="hidden" id="remarkId">
+			<div class="modal-dialog" role="document" style="width: 40%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title">修改备注</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" role="form">
+							<input type="hidden" id="id" />
+							<div class="form-group">
+								<label for="edit-describe" class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-10" style="width: 81%;">
+									<textarea class="form-control" rows="3" id="noteContent"></textarea>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" id="updateRemarkBtn">更新</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	
 		<!-- 返回按钮 -->
 		<div style="position: relative; top: 35px; left: 10px;">
@@ -424,7 +455,7 @@
 					<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 					<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 						<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-						<button type="button" class="btn btn-primary">保存</button>
+						<button type="button" class="btn btn-primary" onclick="saveCustomerRemark()">保存</button>
 					</p>
 				</form>
 			</div>
@@ -504,61 +535,134 @@
 		
 		<div style="height: 200px;"></div>
 		<script>
-			//异步通过id查询客户
-			$.get("workbench/customer/queryDetail", {
-				'id': '${id}'
-			}, function (data) {
-				//data:customer
-				var customer = data;
-				//赋值
-				$("#owner").text(customer.owner);
-				$("#name").text(customer.name);
-				$("#website").text(customer.website);
-				$("#phone").text(customer.phone);
-				$("#createBy").text(customer.createBy);
-				$("#createTime").text(customer.createTime);
-				$("#editBy").text(customer.editBy);
-				$("#editTime").text(customer.editTime);
-				$("#contactSummary").text(customer.contactSummary);
-				$("#nextContactTime").text(customer.nextContactTime);
-				$("#description").text(customer.description);
-				$("#address").text(customer.address);
 
-				//备注
-				var customerRemarks = customer.customerRemarkList;
-				for (var i = 0; i < customerRemarks.length; i++) {
-					var remark = customerRemarks[i];
-					$("#remarkDiv").before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
-							"\t\t\t\t<img title=\"zhangsan\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">\n" +
-							"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
-							"\t\t\t\t\t<h5>" + remark.noteContent + "</h5>\n" +
-							"\t\t\t\t\t<font color=\"gray\">联系人</font> <font color=\"gray\">-</font> <b>" + customer.name + "</b> <small style=\"color: gray;\"> " + customer.createTime + " 由" + customer.createBy + "</small>\n" +
-							"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
-							"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
-							"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
-							"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
-							"\t\t\t\t\t</div>\n" +
-							"\t\t\t\t</div>\n" +
-							"\t\t\t</div>")
-				}
+			refresh();
 
-				$(".remarkDiv").mouseover(function(){
-					$(this).children("div").children("div").show();
-				});
+			//刷新客户备注
+			function refresh() {
+				//异步通过id查询客户备注
+				$.get("workbench/customer/queryDetail", {
+					'id': '${id}'
+				}, function (data) {
+					//data:customer
+					var customer = data;
+					//赋值
+					$("#owner").text(customer.owner);
+					$("#name").text(customer.name);
+					$("#website").text(customer.website);
+					$("#phone").text(customer.phone);
+					$("#createBy").text(customer.createBy);
+					$("#createTime").text(customer.createTime);
+					$("#editBy").text(customer.editBy);
+					$("#editTime").text(customer.editTime);
+					$("#contactSummary").text(customer.contactSummary);
+					$("#nextContactTime").text(customer.nextContactTime);
+					$("#description").text(customer.description);
+					$("#address").text(customer.address);
 
-				$(".remarkDiv").mouseout(function(){
-					$(this).children("div").children("div").hide();
-				});
+					//清空
+					$(".remarkDiv").remove();
+					//备注
+					var customerRemarks = customer.customerRemarkList;
+					for (var i = 0; i < customerRemarks.length; i++) {
+						var remark = customerRemarks[i];
+						$("#remarkDiv").before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
+								"\t\t\t\t<img title=\"zhangsan\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">\n" +
+								"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
+								"\t\t\t\t\t<h5 id='"+ remark.id +"'>" + remark.noteContent + "</h5>\n" +
+								"\t\t\t\t\t<font color=\"gray\">客户</font> <font color=\"gray\">-</font> <b>" + customer.name + "</b> <small style=\"color: gray;\"> " + customer.createTime + " 由" + customer.createBy + "</small>\n" +
+								"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"showUpdateCustomerRemark('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"deleteCustomerRemark('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t</div>\n" +
+								"\t\t\t\t</div>\n" +
+								"\t\t\t</div>")
+					}
 
-				$(".myHref").mouseover(function(){
-					$(this).children("span").css("color","red");
-				});
+					$(".remarkDiv").mouseover(function(){
+						$(this).children("div").children("div").show();
+					});
 
-				$(".myHref").mouseout(function(){
-					$(this).children("span").css("color","#E6E6E6");
-				});
+					$(".remarkDiv").mouseout(function(){
+						$(this).children("div").children("div").hide();
+					});
 
-			}, "json");
+					$(".myHref").mouseover(function(){
+						$(this).children("span").css("color","red");
+					});
+
+					$(".myHref").mouseout(function(){
+						$(this).children("span").css("color","#E6E6E6");
+					});
+
+				}, "json");
+			}
+
+			//异步保存客户备注
+			function saveCustomerRemark() {
+				$.post("workbench/customer/saveCustomerRemark", {
+					"noteContent": $("#remark").val(),
+					"customerId": "${id}"
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						//清空文本框
+						$("#remark").val("");
+
+						//刷新客户
+						refresh();
+					}
+				}, "json");
+			}
+
+			//弹出更新客户模态框
+			function showUpdateCustomerRemark(id) {
+				//设置模态框文本内容
+				var noteContent =  $("#" + id).text();
+				$("#noteContent").val(noteContent);
+
+				//设置模态框中id的值
+				$("#id").val(id);
+
+				//打开模态框
+				$("#editRemarkModal").modal("show");
+			}
+
+			//异步更新客户备注
+			$("#updateRemarkBtn").click(function () {
+				$.post("workbench/customer/updateCustomerRemark",{
+					"noteContent": $("#noteContent").val(),
+					"id": $("#id").val()
+				},function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						refresh();
+
+						//隐藏模态框
+						$("#editRemarkModal").modal("hide");
+					}
+				},"json")
+			});
+
+			//异步删除客户备注
+			function deleteCustomerRemark(id) {
+				$.post("workbench/customer/deleteCustomerRemark", {
+					"id": id
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						refresh();
+					}
+				}, "json");
+			}
+
 		</script>
 	</body>
 </html>

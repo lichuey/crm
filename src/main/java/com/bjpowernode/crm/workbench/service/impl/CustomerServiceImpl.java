@@ -147,7 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    //通过id查询客户
+    //通过id查询客户备注
     @Override
     public Customer queryDetail(String id) {
         //查询客户
@@ -164,5 +164,37 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCustomerRemarkList(customerRemarks);
 
         return customer;
+    }
+
+    //保存客户备注
+    @Override
+    public void saveCustomerRemark(CustomerRemark customerRemark, User user) {
+        customerRemark.setId(UUIDUtil.uuid());
+        customerRemark.setCreateBy(user.getName());
+        customerRemark.setCreateTime(DateTimeUtil.getSysTime());
+        int count = customerRemarkMapper.insertSelective(customerRemark);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CUSTOMER_REMARK_SAVE_FALSE);
+        }
+    }
+
+    //更新客户备注
+    @Override
+    public void updateCustomerRemark(CustomerRemark customerRemark, User user) {
+        customerRemark.setEditBy(user.getName());
+        customerRemark.setEditTime(DateTimeUtil.getSysTime());
+        int count = customerRemarkMapper.updateByPrimaryKeySelective(customerRemark);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CUSTOMER_REMARK_UPDATE_FALSE);
+        }
+    }
+
+    //删除客户备注
+    @Override
+    public void deleteCustomerRemark(String id) {
+        int count = customerRemarkMapper.deleteByPrimaryKey(id);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CUSTOMER_REMARK_DELETE_FALSE);
+        }
     }
 }

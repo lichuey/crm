@@ -368,7 +368,8 @@
 						refresh();
 					}
 				}, "json");
-			};
+			}
+
 		</script>
 	</body>
 </html>

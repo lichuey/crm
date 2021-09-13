@@ -135,7 +135,7 @@ public class ContactsServiceImpl implements ContactsService {
             contacts.setCreateTime(DateTimeUtil.getSysTime());
             int count = contactsMapper.insertSelective(contacts);
             if(count == 0){
-                throw new CrmException(CrmEnum.CONTACTS_SAVEF_FALSE);
+                throw new CrmException(CrmEnum.CONTACTS_SAVE_FALSE);
             }
             //添加
             resultVo.setMessage("添加联系人成功");
