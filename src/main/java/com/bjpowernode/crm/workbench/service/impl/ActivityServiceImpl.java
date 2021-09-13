@@ -216,6 +216,15 @@ public class ActivityServiceImpl implements ActivityService {
         activityRemark.setImg(user.getImg());
         int count = activityRemarkMapper.updateByPrimaryKeySelective(activityRemark);
         if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_REMARK_UPDATE_FALSE);
+        }
+    }
+
+    //删除市场活动备注
+    @Override
+    public void deleteActivityRemark(String id) {
+        int count = activityRemarkMapper.deleteByPrimaryKey(id);
+        if (count == 0) {
             throw new CrmException(CrmEnum.ACTIVITY_REMARK_DELETE_FALSE);
         }
     }

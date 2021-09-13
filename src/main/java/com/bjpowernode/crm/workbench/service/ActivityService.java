@@ -36,4 +36,7 @@ public interface ActivityService {
 
     //更新市场活动备注
     void updateActivityRemark(ActivityRemark activityRemark, User user);
+
+    //删除市场活动备注
+    void deleteActivityRemark(String id);
 }

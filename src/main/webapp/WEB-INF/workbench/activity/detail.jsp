@@ -286,7 +286,7 @@
 								"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
 								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"updateActivityRemark('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
 								"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
-								"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"deleteActivityRemark('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
 								"\t\t\t\t\t</div>\n" +
 								"\t\t\t\t</div>\n" +
 								"\t\t\t</div>");
@@ -355,8 +355,20 @@
 						refresh();
 					}
 				}, "json");
-			})
+			});
 
+			//异步删除活动备注
+			function deleteActivityRemark(id) {
+				$.post("workbench/activity/deleteActivityRemark", {
+					"id": id
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+						refresh();
+					}
+				}, "json");
+			};
 		</script>
 	</body>
 </html>

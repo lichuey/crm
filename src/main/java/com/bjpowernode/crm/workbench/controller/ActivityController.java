@@ -151,4 +151,18 @@ public class ActivityController{
         }
         return resultVo;
     }
+
+    //异步删除市场活动备注
+    @RequestMapping("/workbench/activity/deleteActivityRemark")
+    public ResultVo deleteActivityRemark(String id) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            activityService.deleteActivityRemark(id);
+            resultVo.setResOK(true);
+            resultVo.setMessage("市场活动备注删除成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }
