@@ -67,16 +67,18 @@
 						<button type="button" class="close" data-dismiss="modal">
 							<span aria-hidden="true">×</span>
 						</button>
-						<h4 class="modal-title" id="myModalLabel">修改备注</h4>
+						<h4 class="modal-title">修改备注</h4>
 					</div>
 					<div class="modal-body">
 						<form class="form-horizontal" role="form">
 							<div class="form-group">
 								<label for="edit-describe" class="col-sm-2 control-label">内容</label>
 								<div class="col-sm-10" style="width: 81%;">
-									<textarea class="form-control" rows="3" id="noteContent"></textarea>
+									<textarea class="form-control" rows="3" id="noteContent" mame="notContent"></textarea>
 								</div>
 							</div>
+							<%--id的隐藏域--%>
+							<input type="hidden" id="id" name="id">
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -279,10 +281,10 @@
 						$("#remarkDiv").before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
 								"\t\t\t\t<img title=\"zhangsan\" src='"+ remark.img +"' style=\"width: 30px; height:30px;\">\n" +
 								"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
-								"\t\t\t\t\t<h5>" + remark.noteContent +"</h5>\n" +
+								"\t\t\t\t\t<h5 id='" + remark.id +"'>" + remark.noteContent +"</h5>\n" +
 								"\t\t\t\t\t<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>"+ activity.name +"</b> <small style=\"color: gray;\"> "+ activity.createTime +" 由"+ activity.createBy +"</small>\n" +
 								"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
-								"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"updateActivityRemark('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
 								"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
 								"\t\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
 								"\t\t\t\t\t</div>\n" +
@@ -309,8 +311,8 @@
 				},"json");
 			}
 
+			//异步保存活动备注
 			function saveActivityRemark() {
-				//异步保存活动备注
 				$.get("workbench/activity/saveActivityRemark", {
 					"noteContent": $("#remark").val(),
 					"activityId" : "${id}"
@@ -327,6 +329,33 @@
 					}
 				}, "json");
 			}
+
+			//异步更新活动备注(准备)
+			function updateActivityRemark(id) {
+				//将noteContent的值设置到文本中
+				var noteContent = $("#"+ id).text();
+				$("#noteContent").val(noteContent);
+
+				//将id存入隐藏域中
+				$("#id").val(id);
+
+				$("#editRemarkModal").modal('show');
+			}
+
+			//异步更新活动备注
+			$("#updateRemarkBtn").click(function () {
+				$.post("workbench/activity/updateActivityRemark", {
+					"noteContent": $("#noteContent").val(),
+					"id": $("#id").val()
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+						$("#editRemarkModal").modal('hide');
+						refresh();
+					}
+				}, "json");
+			})
 
 		</script>
 	</body>

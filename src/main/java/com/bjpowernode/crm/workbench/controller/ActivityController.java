@@ -136,4 +136,19 @@ public class ActivityController{
         }
         return resultVo;
     }
+
+    //更新市场活动备注
+    @RequestMapping("/workbench/activity/updateActivityRemark")
+    public ResultVo updateActivityRemark(ActivityRemark activityRemark, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            activityService.updateActivityRemark(activityRemark, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("市场活动备注更新成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }

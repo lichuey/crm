@@ -207,4 +207,16 @@ public class ActivityServiceImpl implements ActivityService {
             throw new CrmException(CrmEnum.ACTIVITY_REMARK_SAVE_FALSE);
         }
     }
+
+    //更新市场活动备注
+    @Override
+    public void updateActivityRemark(ActivityRemark activityRemark, User user) {
+        activityRemark.setEditBy(user.getName());
+        activityRemark.setEditTime(DateTimeUtil.getSysTime());
+        activityRemark.setImg(user.getImg());
+        int count = activityRemarkMapper.updateByPrimaryKeySelective(activityRemark);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_REMARK_DELETE_FALSE);
+        }
+    }
 }

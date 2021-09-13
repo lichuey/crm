@@ -33,4 +33,7 @@ public interface ActivityService {
 
     //保存市场活动备注
     void saveActivityRemark(ActivityRemark activityRemark, User user);
+
+    //更新市场活动备注
+    void updateActivityRemark(ActivityRemark activityRemark, User user);
 }
