@@ -358,8 +358,7 @@
 		
 		<!-- 大标题 -->
 		<div style="position: relative; left: 40px; top: -30px;">
-			<div class="page-header">
-				<h3>动力节点 <small><a href="http://www.bjpowernode.com" target="_blank">http://www.bjpowernode.com</a></small></h3>
+			<div class="page-header" id="head">
 			</div>
 			<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
 				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editCustomerModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
@@ -547,6 +546,7 @@
 					//data:customer
 					var customer = data;
 					//赋值
+					$("#head").html("<h3>" + customer.name + " <small><a href=\""+ 'https://' +customer.website +"\" target=\"_blank\">"+ customer.website +"</a></small></h3>")
 					$("#owner").text(customer.owner);
 					$("#name").text(customer.name);
 					$("#website").text(customer.website);

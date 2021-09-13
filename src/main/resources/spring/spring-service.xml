@@ -34,7 +34,7 @@
             <tx:method name="add*" propagation="REQUIRED" />
             <tx:method name="save*" propagation="REQUIRED" />
             <tx:method name="call*" propagation="REQUIRED" />
-            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
 

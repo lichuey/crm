@@ -10,9 +10,11 @@ import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Contacts;
+import com.bjpowernode.crm.workbench.bean.ContactsRemark;
 import com.bjpowernode.crm.workbench.bean.Customer;
 import com.bjpowernode.crm.workbench.mapper.ActivityMapper;
 import com.bjpowernode.crm.workbench.mapper.ContactsMapper;
+import com.bjpowernode.crm.workbench.mapper.ContactsRemarkMapper;
 import com.bjpowernode.crm.workbench.mapper.CustomerMapper;
 import com.bjpowernode.crm.workbench.service.ContactsService;
 import com.github.pagehelper.PageHelper;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +39,10 @@ public class ContactsServiceImpl implements ContactsService {
     @Autowired
     CustomerMapper customerMapper;
 
+    @Autowired
+    ContactsRemarkMapper contactsRemarkMapper;
+
+    //条件模糊查询
     @Override
     public List<Contacts> list(int page, int pageSize, Contacts contacts) {
 
@@ -117,13 +124,13 @@ public class ContactsServiceImpl implements ContactsService {
         return contactsList;
     }
 
-
+    //查询所有者信息
     @Override
     public List<User> queryUsers() {
         return userMapper.selectAll();
     }
 
-
+    //异步添加或者保存市场活动数据
     @Override
     public ResultVo saveOrUpdate(Contacts contacts, User user) {
         ResultVo resultVo = new ResultVo();
@@ -155,11 +162,13 @@ public class ContactsServiceImpl implements ContactsService {
         return resultVo;
     }
 
+    //根据主键查询市场活动
     @Override
     public Contacts queryById(String id) {
         return contactsMapper.selectByPrimaryKey(id);
     }
 
+    //异步批量删除市场活动数据
     @Override
     public void deleteBatch(String ids) {
         String[] split = ids.split(",");
@@ -168,7 +177,63 @@ public class ContactsServiceImpl implements ContactsService {
         List<String> list = Arrays.asList(split);
         Example example = new Example(Activity.class);
         example.createCriteria().andIn("id", list);
-        contactsMapper.deleteByExample(example);
+        int count = contactsMapper.deleteByExample(example);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CONTACTS_DELETE_FALSE);
+        }
     }
 
+    //异步查询详情页数据
+    @Override
+    public Contacts queryDetail(String id) {
+        Contacts contacts = contactsMapper.selectByPrimaryKey(id);
+
+        //处理owner
+        User user = userMapper.selectByPrimaryKey(contacts.getOwner());
+        contacts.setOwner(user.getName());
+
+        //处理customerId
+        Customer customer = customerMapper.selectByPrimaryKey(contacts.getCustomerId());
+        contacts.setCustomerId(customer.getName());
+
+        //设置contactsRemarkList
+        ContactsRemark contactsRemark = new ContactsRemark();
+        contactsRemark.setContactsId(id);
+        List<ContactsRemark> contactsRemarkList = contactsRemarkMapper.select(contactsRemark);
+        contacts.setContactsRemarkList(contactsRemarkList);
+
+        return contacts;
+    }
+
+    //保存联系人备注
+    @Override
+    public void saveContactsRemark(ContactsRemark contactsRemark, User user) {
+        contactsRemark.setId(UUIDUtil.uuid());
+        contactsRemark.setCreateBy(user.getName());
+        contactsRemark.setCreateTime(DateTimeUtil.getSysTime());
+        int count = contactsRemarkMapper.insertSelective(contactsRemark);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CONTACTS_REMARK_SAVE_FALSE);
+        }
+    }
+
+    //更新联系人备注
+    @Override
+    public void editContactsRemark(ContactsRemark contactsRemark, User user) {
+        contactsRemark.setEditBy(user.getName());
+        contactsRemark.setEditTime(DateTimeUtil.getSysTime());
+        int count = contactsRemarkMapper.updateByPrimaryKeySelective(contactsRemark);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CONTACTS_REMARK_UPDATE_FALSE);
+        }
+    }
+
+    //删除联系人备注
+    @Override
+    public void deleteContactsRemark(String id) {
+        int count = contactsRemarkMapper.deleteByPrimaryKey(id);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CONTACTS_REMARK_DELETE_FALSE);
+        }
+    }
 }

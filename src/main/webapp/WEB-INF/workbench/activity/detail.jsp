@@ -161,8 +161,7 @@
 
 		<!-- 大标题 -->
 		<div style="position: relative; left: 40px; top: -30px;">
-			<div class="page-header">
-				<h3>市场活动-发传单 <small>2020-10-10 ~ 2020-10-20</small></h3>
+			<div class="page-header" id="head">
 			</div>
 			<div style="position: relative; height: 50px; width: 250px;  top: -72px; left: 700px;">
 				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
@@ -258,6 +257,7 @@
 				},function (data) {
 					//data:activity
 					var activity = data;
+					$("#head").html("<h3>市场活动:" + activity.name + " <small>" + activity.startDate + "至" + activity.endDate + "</small></h3>");
 					$("#owner").html(activity.owner);
 					$("#name").html(activity.name);
 					$("#startDate").html(activity.startDate);

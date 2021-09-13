@@ -270,6 +270,38 @@
 			</div>
 		</div>
 
+		<!-- 修改联系人备注的模态窗口 -->
+		<div class="modal fade" id="editRemarkModal" role="dialog">
+			<%-- 备注的id --%>
+			<input type="hidden" id="remarkId">
+			<div class="modal-dialog" role="document" style="width: 40%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title">修改备注</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label for="edit-describe" class="col-sm-2 control-label">内容</label>
+								<div class="col-sm-10" style="width: 81%;">
+									<textarea class="form-control" rows="3" id="noteContent" name="noteContent"></textarea>
+								</div>
+							</div>
+							<%--id的隐藏域--%>
+							<input type="hidden" id="id" name="id">
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="button" class="btn btn-primary" id="updateRemarkBtn">更新</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- 返回按钮 -->
 		<div style="position: relative; top: 35px; left: 10px;">
 			<a href="javascript:void(0);" onclick="window.history.back();"><span class="glyphicon glyphicon-arrow-left" style="font-size: 20px; color: #DDDDDD"></span></a>
@@ -277,8 +309,7 @@
 
 		<!-- 大标题 -->
 		<div style="position: relative; left: 40px; top: -30px;">
-			<div class="page-header">
-				<h3>李四先生 <small> - 动力节点</small></h3>
+			<div class="page-header" id="divTestId">
 			</div>
 			<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
 				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editContactsModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
@@ -290,51 +321,51 @@
 		<div style="position: relative; top: -70px;">
 			<div style="position: relative; left: 40px; height: 30px;">
 				<div style="width: 300px; color: gray;">所有者</div>
-				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>zhangsan</b></div>
+				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="owner"></b></div>
 				<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">来源</div>
-				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>广告</b></div>
+				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="source"></b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 10px;">
 				<div style="width: 300px; color: gray;">客户名称</div>
-				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>动力节点</b></div>
+				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="customerId1"></b></div>
 				<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">姓名</div>
-				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>李四先生</b></div>
+				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="fullname1"></b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 20px;">
 				<div style="width: 300px; color: gray;">邮箱</div>
-				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>lisi@bjpowernode.com</b></div>
+				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="email"></b></div>
 				<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">手机</div>
-				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>12345678901</b></div>
+				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="mphone"></b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 30px;">
 				<div style="width: 300px; color: gray;">职位</div>
-				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>CTO</b></div>
+				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="job"></b></div>
 				<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">生日</div>
-				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>&nbsp;</b></div>
+				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="birth"></b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 40px;">
 				<div style="width: 300px; color: gray;">创建者</div>
-				<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>zhangsan&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">2017-01-18 10:10:10</small></div>
+				<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b id="createBy"></b><small style="font-size: 10px; color: gray;" id="createTime"></small></div>
 				<div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 50px;">
 				<div style="width: 300px; color: gray;">修改者</div>
-				<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>zhangsan&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">2017-01-19 10:10:10</small></div>
+				<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b id="editBy"></b><small style="font-size: 10px; color: gray;" id="editTime"></small></div>
 				<div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 60px;">
 				<div style="width: 300px; color: gray;">描述</div>
 				<div style="width: 630px;position: relative; left: 200px; top: -20px;">
-					<b>
-						这是一条线索的描述信息 （线索转换之后会将线索的描述转换到联系人的描述中）
+					<b id="description">
+
 					</b>
 				</div>
 				<div style="height: 1px; width: 850px; background: #D5D5D5; position: relative; top: -20px;"></div>
@@ -342,22 +373,22 @@
 			<div style="position: relative; left: 40px; height: 30px; top: 70px;">
 				<div style="width: 300px; color: gray;">联系纪要</div>
 				<div style="width: 630px;position: relative; left: 200px; top: -20px;">
-					<b>
-						&nbsp;
+					<b id="contactSummary">
+
 					</b>
 				</div>
 				<div style="height: 1px; width: 850px; background: #D5D5D5; position: relative; top: -20px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 80px;">
 				<div style="width: 300px; color: gray;">下次联系时间</div>
-				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>&nbsp;</b></div>
+				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b id="nextContactTime"></b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -20px;"></div>
 			</div>
 			<div style="position: relative; left: 40px; height: 30px; top: 90px;">
 				<div style="width: 300px; color: gray;">详细地址</div>
 				<div style="width: 630px;position: relative; left: 200px; top: -20px;">
-					<b>
-						大族企业湾
+					<b id="address">
+
 					</b>
 				</div>
 				<div style="height: 1px; width: 850px; background: #D5D5D5; position: relative; top: -20px;"></div>
@@ -369,7 +400,7 @@
 				<h4>备注</h4>
 			</div>
 
-			<!-- 备注1 -->
+			<%--<!-- 备注1 -->
 			<div class="remarkDiv" style="height: 60px;">
 				<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
 				<div style="position: relative; top: -40px; left: 40px;" >
@@ -382,27 +413,14 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- 备注2 -->
-			<div class="remarkDiv" style="height: 60px;">
-				<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
-				<div style="position: relative; top: -40px; left: 40px;" >
-					<h5>呵呵！</h5>
-					<font color="gray">联系人</font> <font color="gray">-</font> <b>李四先生-北京动力节点</b> <small style="color: gray;"> 2017-01-22 10:20:10 由zhangsan</small>
-					<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-						<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
-					</div>
-				</div>
-			</div>
+			--%>
 
 			<div id="remarkDiv" style="background-color: #E6E6E6; width: 870px; height: 90px;">
 				<form role="form" style="position: relative;top: 10px; left: 10px;">
 					<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 					<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 						<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-						<button type="button" class="btn btn-primary">保存</button>
+						<button type="button" onclick="saveContactsRemark()" class="btn btn-primary">保存</button>
 					</p>
 				</form>
 			</div>
@@ -486,47 +504,133 @@
 		<div style="height: 200px;"></div>
 
 		<script>
-			//查询市场活动详情页数据
-			$.get("workbench/contacts/queryDetail",{'id':'${id}'},function (data) {
-				//data:Contacts
-				var contacts = data;
-				$('#owner').text(activity.owner);
 
-				//取出市场活动的备注集合
-				var activityRemarks = activity.activityRemarkList;
-				for(var i = 0; i <activityRemarks.length; i++){
-					var remark = activityRemarks[i];
-					$('#remarkDiv').before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
-							"\t\t\t<img title=\"zhangsan\" src=\"/crm/image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">\n" +
-							"\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
-							"\t\t\t\t<h5>"+remark.noteContent+"</h5>\n" +
-							"\t\t\t\t<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>"+activity.name+"</b> <small style=\"color: gray;\"> "+activity.createTime+" "+activity.createBy+"</small>\n" +
-							"\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
-							"\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
-							"\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
-							"\t\t\t\t\t<a class=\"myHref\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
-							"\t\t\t\t</div>\n" +
-							"\t\t\t</div>\n" +
-							"\t\t</div>");
-				}
+			refresh();
 
-				$(".remarkDiv").mouseover(function(){
-					$(this).children("div").children("div").show();
-				});
+			//刷新
+			function refresh() {
+				//查询联系人详情页数据
+				$.get("workbench/contacts/queryDetail",{'id':'${id}'},function (data) {
+					//data:contacts
+					var contacts = data;
+					$("#owner").text(contacts.owner);
+					$("#source").text(contacts.source);
+					$("#customerId1").text(contacts.customerId);
+					$("#fullname1").text(contacts.fullname);
+					$("#divTestId").html("<h3 >"+contacts.fullname+"<small>"+contacts.customerId+"</small></h3>");
+					$("#email").text(contacts.email);
+					$("#mphone").text(contacts.mphone);
+					$("#job").text(contacts.job);
+					$("#birth").text(contacts.birth);
+					$("#createBy").text(contacts.createBy);
+					$("#createTime").text(contacts.createTime);
+					$("#editBy").text(contacts.editBy);
+					$("#editTime").text(contacts.editTime);
+					$("#description").text(contacts.description);
+					$("#contactSummary").text(contacts.contactSummary);
+					$("#nextContactTime").text(contacts.nextContactTime);
+					$("#address").text(contacts.address);
 
-				$(".remarkDiv").mouseout(function(){
-					$(this).children("div").children("div").hide();
-				});
+					//清空
+					$(".remarkDiv").remove();
 
-				$(".myHref").mouseover(function(){
-					$(this).children("span").css("color","red");
-				});
+					//取出联系人的备注集合
+					var contactsRemarks = contacts.contactsRemarkList;
+					for(var i = 0; i <contactsRemarks.length; i++){
+						var remark = contactsRemarks[i];
+						$('#remarkDiv').before("<div class=\"remarkDiv\" style=\"height: 60px;\">\n" +
+								"\t\t\t\t<img title=\"zhangsan\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">\n" +
+								"\t\t\t\t<div style=\"position: relative; top: -40px; left: 40px;\" >\n" +
+								"\t\t\t\t\t<h5 id='"+ remark.id +"'>"+ remark.noteContent +"</h5>\n" +
+								"\t\t\t\t\t<font color=\"gray\">联系人</font> <font color=\"gray\">-</font> <b>"+ contacts.fullname + '-' + contacts.customerId +"</b> <small style=\"color: gray;\"> " + contacts.createTime + " 由 " + contacts.createBy + "</small>\n" +
+								"\t\t\t\t\t<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"showEditContactsRemarkModel('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;\n" +
+								"\t\t\t\t\t\t<a class=\"myHref\" onclick=\"deleteContactsRemarkModel('"+ remark.id +"')\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>\n" +
+								"\t\t\t\t\t</div>\n" +
+								"\t\t\t\t</div>\n" +
+								"\t\t\t</div>");
+					}
 
-				$(".myHref").mouseout(function(){
-					$(this).children("span").css("color","#E6E6E6");
-				});
+					$(".remarkDiv").mouseover(function(){
+						$(this).children("div").children("div").show();
+					});
 
-			},'json');
+					$(".remarkDiv").mouseout(function(){
+						$(this).children("div").children("div").hide();
+					});
+
+					$(".myHref").mouseover(function(){
+						$(this).children("span").css("color","red");
+					});
+
+					$(".myHref").mouseout(function(){
+						$(this).children("span").css("color","#E6E6E6");
+					});
+
+				},'json');
+			}
+
+			//保存联系人备注
+			function saveContactsRemark() {
+				$.post("workbench/contacts/saveContactsRemark", {
+					"noteContent": $("#remark").val(),
+					"contactsId": "${id}"
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						$("#remark").val("");
+
+						refresh();
+					}
+				}, "json");
+			}
+
+			//弹出修改模态框
+			function showEditContactsRemarkModel(id) {
+				//保存noteContent
+				var noteContent = $("#" + id).text();
+				$("#noteContent").val(noteContent);
+
+				//保存id
+				$("#id").val(id);
+
+				$("#editRemarkModal").modal("show");
+			}
+
+			//更新联系人备注
+			$("#updateRemarkBtn").click(function () {
+				$.post("workbench/contacts/editContactsRemark", {
+					"noteContent": $("#noteContent").val(),
+					"id": $("#id").val()
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						$("#editRemarkModal").modal("hide");
+
+						refresh();
+					}
+				}, "json");
+			})
+
+			//删除联系人备注
+			function deleteContactsRemarkModel(id) {
+				$.post("workbench/contacts/deleteContactsRemarkModel", {
+					"id": id
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						refresh();
+					}
+				}, "json");
+			}
+
 		</script>
 	</body>
 </html>

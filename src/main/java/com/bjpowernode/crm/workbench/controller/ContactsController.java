@@ -6,6 +6,7 @@ import com.bjpowernode.crm.base.util.CommonUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Contacts;
+import com.bjpowernode.crm.workbench.bean.ContactsRemark;
 import com.bjpowernode.crm.workbench.service.ContactsService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class ContactsController {
     @Autowired
     ContactsService contactsService;
 
-    //使用BootStrap分页插件实现,还能实现条件模糊查询
+    //条件模糊查询
     @RequestMapping("/workbench/contacts/list")
     public PageInfo list(int page, int pageSize, Contacts contacts) {
 
@@ -67,6 +68,57 @@ public class ContactsController {
             resultVo.setResOK(true);
             resultVo.setMessage("删除联系人成功");
         }catch (CrmException e){
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //异步查询详情页数据
+    @RequestMapping("/workbench/contacts/queryDetail")
+    public Contacts queryDetail(String id){
+        Contacts contacts = contactsService.queryDetail(id);
+        return contacts;
+    }
+
+    //保存联系人备注
+    @RequestMapping("/workbench/contacts/saveContactsRemark")
+    public ResultVo saveContactsRemark(ContactsRemark contactsRemark, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            contactsService.saveContactsRemark(contactsRemark, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("联系人备注保存成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //更新联系人备注
+    @RequestMapping("/workbench/contacts/editContactsRemark")
+    public ResultVo editContactsRemark(ContactsRemark contactsRemark, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            contactsService.editContactsRemark(contactsRemark, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("联系人备注更新成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //删除联系人备注
+    @RequestMapping("/workbench/contacts/deleteContactsRemarkModel")
+    public ResultVo deleteContactsRemarkModel(String id) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            contactsService.deleteContactsRemark(id);
+            resultVo.setResOK(true);
+            resultVo.setMessage("联系人备注删除成功");
+        } catch (CrmException e) {
             resultVo.setMessage(e.getMessage());
         }
         return resultVo;

@@ -6,6 +6,7 @@ import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 /**
  * 联系人实体类
@@ -35,4 +36,6 @@ public class Contacts {
     private String nextContactTime;
     private String address;
 
+    //联系人备注
+    private List<ContactsRemark> contactsRemarkList;
 }
