@@ -77,11 +77,11 @@ public class ActivityController{
         return pageInfo;
     }
 
-    //查询所有用户
+    /*//查询所有用户
     @RequestMapping("/workbench/activity/queryUsers")
     public List<User> queryUsers() {
         return activityService.selectUsers();
-    }
+    }*/
 
     //保存或更新活动
     @RequestMapping("/workbench/activity/saveOrUpdate")

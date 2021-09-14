@@ -13,9 +13,9 @@ public interface ContactsService {
     //条件模糊查询
     List<Contacts> list(int page, int pageSize, Contacts contacts);
 
-    //查询所有者信息
+    /*//查询所有者信息
     List<User> queryUsers();
-
+*/
     //异步添加或者保存市场活动数据
     ResultVo saveOrUpdate(Contacts contacts, User user);
 

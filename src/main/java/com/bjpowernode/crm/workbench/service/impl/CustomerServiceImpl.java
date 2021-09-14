@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -128,11 +127,11 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.selectByPrimaryKey(id);
     }
 
-    //获取所有用户
+    /*//获取所有用户
     @Override
     public List<User> queryAllUser() {
         return userMapper.selectAll();
-    }
+    }*/
 
     //删除客户
     @Override

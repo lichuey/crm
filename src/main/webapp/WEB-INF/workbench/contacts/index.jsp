@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -57,29 +58,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<label for="create-contactsOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="create-contactsOwner" name="owner">
-									  <%--<option>zhangsan</option>
-									  <option>lisi</option>
-									  <option>wangwu</option>--%>
+									   <c:forEach items="${userList}" var="user">
+										   <option value="${user.id}">${user.name}</option>
+									   </c:forEach>
 									</select>
 								</div>
 								<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="create-clueSource" name="source">
-									  <option></option>
-									  <option>广告</option>
-									  <option>推销电话</option>
-									  <option>员工介绍</option>
-									  <option>外部介绍</option>
-									  <option>在线商场</option>
-									  <option>合作伙伴</option>
-									  <option>公开媒介</option>
-									  <option>销售邮件</option>
-									  <option>合作伙伴研讨会</option>
-									  <option>内部研讨会</option>
-									  <option>交易会</option>
-									  <option>web下载</option>
-									  <option>web调研</option>
-									  <option>聊天</option>
+									  	<option></option>
+										<c:forEach items="${map['source']}" var="source">
+											<option value="${source.value}">${source.text}</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -93,11 +83,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="create-call" name="appellation">
 									  <option></option>
-									  <option>先生</option>
-									  <option>夫人</option>
-									  <option>女士</option>
-									  <option>博士</option>
-									  <option>教授</option>
+									  <c:forEach items="${map['appellation']}" var="appellation">
+										  <option value="${appellation.value}">${appellation.text}</option>
+									  </c:forEach>
 									</select>
 								</div>
 								
@@ -194,29 +182,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<label for="edit-contactsOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-contactsOwner" name="owner">
-									  <%--<option selected>zhangsan</option>
-									  <option>lisi</option>
-									  <option>wangwu</option>--%>
+									  <c:forEach items="${userList}" var="user">
+										  <option value="${user.id}">${user.name}</option>
+									  </c:forEach>
 									</select>
 								</div>
 								<label for="edit-clueSource1" class="col-sm-2 control-label">来源</label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-clueSource1" name="source">
 									  <option></option>
-									  <option selected>广告</option>
-									  <option>推销电话</option>
-									  <option>员工介绍</option>
-									  <option>外部介绍</option>
-									  <option>在线商场</option>
-									  <option>合作伙伴</option>
-									  <option>公开媒介</option>
-									  <option>销售邮件</option>
-									  <option>合作伙伴研讨会</option>
-									  <option>内部研讨会</option>
-									  <option>交易会</option>
-									  <option>web下载</option>
-									  <option>web调研</option>
-									  <option>聊天</option>
+									  <c:forEach items="${map['source']}" var="source">
+										  <option value="${source.value}">${source.text}</option>
+									  </c:forEach>
 									</select>
 								</div>
 							</div>
@@ -230,11 +207,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-call" name="appellation">
 									  <option></option>
-									  <option selected>先生</option>
-									  <option>夫人</option>
-									  <option>女士</option>
-									  <option>博士</option>
-									  <option>教授</option>
+									  <c:forEach items="${map['appellation']}" var="appellation">
+										  <option value="${appellation.value}">${appellation.text}</option>
+									  </c:forEach>
 									</select>
 								</div>
 							</div>
@@ -361,20 +336,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						  <div class="input-group-addon">来源</div>
 						  <select class="form-control" id="edit-clueSource" name="source">
 							  <option></option>
-							  <option>广告</option>
-							  <option>推销电话</option>
-							  <option>员工介绍</option>
-							  <option>外部介绍</option>
-							  <option>在线商场</option>
-							  <option>合作伙伴</option>
-							  <option>公开媒介</option>
-							  <option>销售邮件</option>
-							  <option>合作伙伴研讨会</option>
-							  <option>内部研讨会</option>
-							  <option>交易会</option>
-							  <option>web下载</option>
-							  <option>web调研</option>
-							  <option>聊天</option>
+							  <c:forEach items="${map['source']}" var="source">
+								  <option value="${source.value}">${source.text}</option>
+							  </c:forEach>
 							</select>
 						</div>
 					  </div>
@@ -561,7 +525,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			pickerPosition: "bottom-left"
 		});
 
-		//异步查询所有用户信息
+		/*//异步查询所有用户信息
 		$.get("workbench/contacts/queryUsers",function (data) {
 			//data:List<User>
 			//清空内容
@@ -571,7 +535,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$('#create-contactsOwner').append("<option value="+user.id+">"+user.name+"</option>");
 
 			}
-		},'json');
+		},'json');*/
 
 		//异步保存或者修改市场活动 bind:绑定所有事件 参数1:绑定的事件名称 参数2:触发的函数
 		function saveOrUpdate(text){
@@ -636,20 +600,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.get("workbench/contacts/queryById",{'id':id},function (data) {
 					var contacts = data;
 					//data:Contacts owner
-					//异步查询所有者信息
-					$.get("workbench/contacts/queryUsers",function (data) {
-						//data:List<User>
-						//清空内容
-						$('#edit-contactsOwner').html("");
-						for(var i in data){
-							var user = data[i];
-							if(contacts.owner == user.id){
-								$('#edit-contactsOwner').append("<option selected value="+user.id+">"+user.name+"</option>");
-							}else{
-								$('#edit-contactsOwner').append("<option value="+user.id+">"+user.name+"</option>");
-							}
-						}
 
+						$("#edit-contactsOwner").val(contacts.owner);
 						//设置模态窗口中的内容
 						$('#edit-clueSource1').val(contacts.source);
 						$('#edit-surname').val(contacts.fullname);
@@ -665,7 +617,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						$('#edit-address2').val(contacts.address);
 						//把市场活动主键设置到隐藏域中
 						$('#id').val(contacts.id);
-					},'json');
+
 
 				},'json');
 			}

@@ -21,8 +21,8 @@ public interface CustomerService {
     //获取所有客户数据
     Customer queryCustomerById(String id);
 
-    //获取所有用户
-    List<User> queryAllUser();
+    /*//获取所有用户
+    List<User> queryAllUser();*/
 
     //删除客户
     void deleteCustomerById(String ids);

@@ -111,17 +111,17 @@ public class ActivityServiceImpl implements ActivityService {
         return activities;
     }
 
-    //查询总记录数
+   /* //查询总记录数
     @Override
     public int count() {
         return activityMapper.selectAll().size();
-    }
+    }*/
 
-    //查询所有用户
+   /* //查询所有用户
     @Override
     public List<User> selectUsers() {
         return userMapper.selectAll();
-    }
+    }*/
 
     //保存或更新活动
     @Override

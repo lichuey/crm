@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -37,11 +38,9 @@
                                         style="font-size: 15px; color: red;">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
                                     <select class="form-control" name="owner" id="create-marketActivityOwner">
-                                        <%--
-                                        <option>zhangsan</option>
-                                        <option>lisi</option>
-                                        <option>wangwu</option>
-                                        --%>
+                                        <c:forEach items="${userList}" var="user" varStatus="sta">
+                                            <option value="${user.id}">${user.name}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span
@@ -105,11 +104,9 @@
                                         style="font-size: 15px; color: red;">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
                                     <select class="form-control" name="owner" id="edit-marketActivityOwner">
-                                        <%--
-                                        <option>zhangsan</option>
-                                        <option>lisi</option>
-                                        <option>wangwu</option>
-                                        --%>
+                                        <c:forEach items="${userList}" var="user" varStatus="sta">
+                                            <option value="${user.id}">${user.name}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                                 <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span
@@ -418,14 +415,14 @@
                 refresh(1,3)
             }
 
-            //查询所有用户
+            /*//查询所有用户
             $.get("workbench/activity/queryUsers", function (data) {
                 //data:List<User>
                 for (var i in data) {
                     var user = data[i];
                     $("#create-marketActivityOwner").append("<option value='" + user.id + "'>" + user.name + "</option>");
                 }
-            }, "json");
+            }, "json");*/
 
             //创建拟态框开始日期
             $("#create-startTime").datetimepicker({
@@ -544,7 +541,7 @@
                         //data:activity 获取活动数据
                         var activity = data;
 
-                        //查询用户列表
+                       /* //查询用户列表
                         $.get("workbench/activity/queryUsers", function (data) {
                             //data:List<User>
                             $("#edit-marketActivityOwner").html("");
@@ -556,7 +553,8 @@
                                     $("#edit-marketActivityOwner").append("<option value='" + user.id + "'>" + user.name + "</option>");
                                 }
                             }
-                        }, "json");
+                        }, "json");*/
+                        $("#edit-marketActivityOwner").val(activity.owner);
 
                         //将活动数据存入编辑拟态框
                         $("#edit-marketActivityName").val(activity.name);

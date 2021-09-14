@@ -12,12 +12,12 @@ public interface ActivityService {
 
     //查询所有的市场活动
     List<Activity> list(int page, int pageSize, Activity activity);
-
+/*
     //查询总记录数
     int count();
 
     //查询所有用户
-    List<User> selectUsers();
+    List<User> selectUsers();*/
 
     //保存或更新活动
     ResultVo saveOrUpdate(Activity activity, User user);

@@ -160,6 +160,13 @@
       <version>1.2.5</version>
     </dependency>
 
+    <!--导入j2ee包-->
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>1.2</version>
+    </dependency>
+
   </dependencies>
 
 </project>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -50,9 +51,9 @@
 								<label for="create-customerOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" name="owner" id="create-customerOwner">
-									  <%--<option>zhangsan</option>
-									  <option>lisi</option>
-									  <option>wangwu</option>--%>
+										<c:forEach items="${userList}" var="user">
+											<option value="${user.id}">${user.name}</option>
+										</c:forEach>
 									</select>
 								</div>
 								<label for="create-customerName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -132,11 +133,9 @@
 								<label for="edit-customerOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" name="owner" id="edit-customerOwner">
-									  <%--
-									  <option>zhangsan</option>
-									  <option>lisi</option>
-									  <option>wangwu</option>
-									  --%>
+										<c:forEach items="${userList}" var="user">
+											<option value="${user.id}">${user.name}</option>
+										</c:forEach>
 									</select>
 								</div>
 								<label for="edit-customerName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -399,7 +398,7 @@
 				refresh(1, 2);
 			}
 
-			//查询所有用户
+			/*//查询所有用户
 			$.get("workbench/customer/queryUser", function (data) {
 				var userList = data;
 				for (var i in userList) {
@@ -407,7 +406,7 @@
 					var user = userList[i];
 					$("#create-customerOwner").append("<option value='" + user.id + "'>" + user.name + "</option>");
 				}
-			}, "json");
+			}, "json");*/
 
 			//保存更新客户
 			function saveOrUpdate(text) {
@@ -476,7 +475,9 @@
 						$("#create-address").val(customer.address);
 						//把客户的id设置到隐藏域中
 						$("#id").val(customer.id);
-						//查询所有owner
+
+						$("#edit-customerOwner").val(customer.owner);
+						/*//查询所有owner
 						$.get("workbench/customer/queryAllUser", function (data) {
 							$("#edit-customerOwner").html("");
 							var userList = data;
@@ -488,7 +489,7 @@
 									$("#edit-customerOwner").append("<option value='" + user.id + "'>" + user.name + "</option>\n");
 								}
 							}
-						},"json");
+						},"json");*/
 					}, "json");
 				}
 			}

@@ -58,11 +58,11 @@ public class CustomerController {
         return customerService.queryCustomerById(id);
     }
 
-    //获取所有用户
+    /*//获取所有用户
     @RequestMapping("/workbench/customer/queryAllUser")
     public List<User> queryAllUser() {
         return customerService.queryAllUser();
-    }
+    }*/
 
     //删除客户
     @RequestMapping("/workbench/customer/deleteCustomerById")

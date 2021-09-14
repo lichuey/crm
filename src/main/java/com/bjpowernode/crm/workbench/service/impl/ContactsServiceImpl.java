@@ -124,11 +124,11 @@ public class ContactsServiceImpl implements ContactsService {
         return contactsList;
     }
 
-    //查询所有者信息
+    /*//查询所有者信息
     @Override
     public List<User> queryUsers() {
         return userMapper.selectAll();
-    }
+    }*/
 
     //异步添加或者保存市场活动数据
     @Override

@@ -34,11 +34,11 @@ public class ContactsController {
         return pageInfo;
     }
 
-    //查询所有者信息
+   /* //查询所有者信息
     @RequestMapping("/workbench/contacts/queryUsers")
     public List<User> queryUsers() {
         return contactsService.queryUsers();
-    }
+    }*/
 
     //异步添加或者保存市场活动数据
     @RequestMapping("/workbench/contacts/saveOrUpdate")
