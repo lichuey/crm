@@ -165,4 +165,39 @@ public class ActivityController{
         }
         return resultVo;
     }
+
+    //异步通过id查询活动
+    @RequestMapping("/workbench/activity/selectActivityById")
+    public Activity selectActivityById(String id) {
+        return activityService.selectActivityById(id);
+    }
+
+    //异步更新市场活动
+    @RequestMapping("/workbench/activity/updateActivityModal")
+    public ResultVo updateActivityModal(Activity activity, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            activityService.updateActivityModal(activity, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("市场活动更新成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //异步删除市场活动
+    @RequestMapping("/workbench/activity/deleteActivityDetail")
+    public ResultVo deleteActivityDetail(String id) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            activityService.deleteActivityDetail(id);
+            resultVo.setResOK(true);
+            resultVo.setMessage("市场活动删除成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }

@@ -39,4 +39,13 @@ public interface ActivityService {
 
     //删除市场活动备注
     void deleteActivityRemark(String id);
+
+    //异步通过id查询活动
+    Activity selectActivityById(String id);
+
+    //异步更新市场活动
+    void updateActivityModal(Activity activity, User user);
+
+    //异步删除市场活动
+    void deleteActivityDetail(String id);
 }

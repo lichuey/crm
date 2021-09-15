@@ -228,4 +228,30 @@ public class ActivityServiceImpl implements ActivityService {
             throw new CrmException(CrmEnum.ACTIVITY_REMARK_DELETE_FALSE);
         }
     }
+
+    //异步通过id查询活动
+    @Override
+    public Activity selectActivityById(String id) {
+        return activityMapper.selectByPrimaryKey(id);
+    }
+
+    //异步更新市场活动
+    @Override
+    public void updateActivityModal(Activity activity, User user) {
+        activity.setEditBy(user.getName());
+        activity.setEditTime(DateTimeUtil.getSysTime());
+        int count = activityMapper.updateByPrimaryKeySelective(activity);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_UPDATE_FALSE);
+        }
+    }
+
+    //异步删除市场活动
+    @Override
+    public void deleteActivityDetail(String id) {
+        int count = activityMapper.deleteByPrimaryKey(id);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.ACTIVITY_DELETE_FALSE);
+        }
+    }
 }
