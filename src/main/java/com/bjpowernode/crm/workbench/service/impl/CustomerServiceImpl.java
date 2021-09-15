@@ -196,4 +196,21 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CrmException(CrmEnum.CUSTOMER_REMARK_DELETE_FALSE);
         }
     }
+
+    //通过id查询客户
+    @Override
+    public Customer showEditCustomerDetailModal(String id) {
+        return customerMapper.selectByPrimaryKey(id);
+    }
+
+    //更新客户信息
+    @Override
+    public void updateCustomer(Customer customer, User user) {
+        customer.setEditBy(user.getName());
+        customer.setEditTime(DateTimeUtil.getSysTime());
+        int count = customerMapper.updateByPrimaryKey(customer);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CUSTOMER_UPDATE_FALSE);
+        }
+    }
 }

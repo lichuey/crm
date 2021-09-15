@@ -38,4 +38,10 @@ public interface CustomerService {
 
     //删除客户备注
     void deleteCustomerRemark(String id);
+
+    //通过id查询客户
+    Customer showEditCustomerDetailModal(String id);
+
+    //更新客户信息
+    void updateCustomer(Customer customer, User user);
 }

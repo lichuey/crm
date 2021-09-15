@@ -436,47 +436,43 @@
 
 			//异步更新市场活动
 			$("#updateActivityModal").click(function () {
-				$.post("workbench/activity/updateActivityModal", $("#editForm").serialize()
-						/*"id": "",
-                        "owner": $("#edit-marketActivityOwner").val(),
-                        "name": $("#edit-marketActivityName").val(),
-                        "startDate": $("#edit-startTime").val(),
-                        "endDate": $("#edit-endTime").val(),
-                        "cost": $("#edit-cost").val(),
-                        "description": $("#edit-describe").val()*/
-						, function (data) {
-							//data:resultVo
-							if (data.resOK) {
-								alert(data.message);
+				$.post("workbench/activity/updateActivityModal", {
+					"id": "${id}",
+					"owner": $("#edit-marketActivityOwner").val(),
+					"name": $("#edit-marketActivityName").val(),
+					"startDate": $("#edit-startTime").val(),
+					"endDate": $("#edit-endTime").val(),
+					"cost": $("#edit-cost").val(),
+					"description": $("#edit-describe").val()
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
 
-								refresh();
+						refresh();
 
-								$("#editActivityModal").modal("hide");
-							}
-						}, "json");
+						$("#editActivityModal").modal("hide");
+					}
+				}, "json");
 			});
 
 			//异步删除市场活动
 			function deleteActivityDetail() {
-				$.post("workbench/activity/deleteActivityDetail", {
-					"id": "${id}"
-				}, function (data) {
-					//data:resultVo
-					if (data.resOK) {
-						layer.alert('你确定删除这条活动吗？此操作不可逆！', {
-							time: 0 //不自动关闭
-							,btn: ['删除', '取消']
-							,yes: function(index){
-								layer.close(index);
+				layer.alert('你确定删除这条活动吗？此操作不可逆！', {
+					time: 0 //不自动关闭
+					,btn: ['删除', '取消']
+					,yes: function(index){
+						layer.close(index);
+						$.post("workbench/activity/deleteActivityDetail", {
+							"id": "${id}"
+						}, function (data) {
+							//data:resultVo
+						}, "json");
 
-								//跳转到index.jsp
-								location.href = "toView/workbench/activity/index";
-							}
-						});
-
-						refresh();
+						//跳转到index.jsp
+						location.href = "toView/workbench/activity/index";
 					}
-				}, "json");
+				});
 			}
 
 		</script>

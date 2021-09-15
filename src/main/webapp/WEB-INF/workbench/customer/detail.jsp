@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -10,6 +11,8 @@
 		<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
 		<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+		<%--layer--%>
+		<script type="text/javascript" src="jquery/layer/layer.js"></script>
 		
 		<script type="text/javascript">
 		
@@ -253,25 +256,25 @@
 								<label for="edit-customerOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-customerOwner">
-										<option>zhangsan</option>
-										<option>lisi</option>
-										<option>wangwu</option>
+										<c:forEach items="${userList}" var="user">
+											<option value="${user.id}">${user.name}</option>
+										</c:forEach>
 									</select>
 								</div>
 								<label for="edit-customerName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-customerName" value="动力节点">
+									<input type="text" class="form-control" id="edit-customerName">
 								</div>
 							</div>
 	
 							<div class="form-group">
 								<label for="edit-website" class="col-sm-2 control-label">公司网站</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-website" value="http://www.bjpowernode.com">
+									<input type="text" class="form-control" id="edit-website">
 								</div>
 								<label for="edit-phone" class="col-sm-2 control-label">公司座机</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-phone" value="010-84846003">
+									<input type="text" class="form-control" id="edit-phone">
 								</div>
 							</div>
 	
@@ -305,7 +308,7 @@
 								<div class="form-group">
 									<label for="edit-address" class="col-sm-2 control-label">详细地址</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="1" id="edit-address">北京大兴大族企业湾</textarea>
+										<textarea class="form-control" rows="1" id="edit-address"></textarea>
 									</div>
 								</div>
 							</div>
@@ -314,7 +317,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="updateCustomer()">更新</button>
 					</div>
 				</div>
 			</div>
@@ -361,8 +364,8 @@
 			<div class="page-header" id="head">
 			</div>
 			<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editCustomerModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
-				<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				<button type="button" class="btn btn-default" data-toggle="modal" onclick="showEditCustomerDetailModal()"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+				<button type="button" class="btn btn-danger" onclick="deleteCustomer()"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 			</div>
 		</div>
 		
@@ -662,6 +665,72 @@
 					}
 				}, "json");
 			}
+
+			//打开编辑模态框
+			function showEditCustomerDetailModal() {
+				//通过id查询customer
+				$.get("workbench/customer/showEditCustomerDetailModal", {
+					"id": "${id}"
+				}, function (data) {
+					//data:customer
+					var customer = data;
+					$("#edit-customerOwner").val(customer.owner);
+					$("#edit-customerName").val(customer.name);
+					$("#edit-website").val(customer.website);
+					$("#edit-phone").val(customer.phone);
+					$("#edit-describe").val(customer.description);
+					$("#create-contactSummary1").val(customer.contactSummary);
+					$("#create-nextContactTime2").val(customer.nextContactTime);
+					$("#edit-address").val(customer.address);
+
+					//展示模态框
+					$("#editCustomerModal").modal("show");
+
+				}, "json");
+			}
+
+			//异步更新客户
+			function updateCustomer() {
+				$.post("workbench/customer/updateCustomer", {
+					"id": "${id}",
+					"owner": $("#edit-customerOwner").val(),
+					"name": $("#edit-customerName").val(),
+					"website": $("#edit-website").val(),
+					"phone": $("#edit-phone").val(),
+					"description": $("#edit-describe").val(),
+					"contactSummary": $("#create-contactSummary1").val(),
+					"nextContactTime2": $("#create-nextContactTime2").val(),
+					"address": $("#edit-address").val()
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						refresh();
+					}
+				}, "json");
+			}
+
+			//异步删除客户
+			function deleteCustomer() {
+				layer.alert('你确定删除这条客户信息吗？此操作不可逆！', {
+					time: 0 //不自动关闭
+					,btn: ['删除', '取消']
+					,yes: function(index){
+						layer.close(index);
+
+						$.post("workbench/customer/deleteCustomer", {
+							"id": "${id}"
+						}, function (data) {
+							//data:resultVo
+						}, "json");
+
+						//跳转到index.jsp
+						location.href = "toView/workbench/customer/index";
+					}
+				});
+			}
+
 
 		</script>
 	</body>

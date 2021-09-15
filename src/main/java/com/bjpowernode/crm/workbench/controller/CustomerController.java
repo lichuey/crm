@@ -127,4 +127,39 @@ public class CustomerController {
         }
         return resultVo;
     }
+
+    //通过id查询客户
+    @RequestMapping("/workbench/customer/showEditCustomerDetailModal")
+    public Customer showEditCustomerDetailModal(String id) {
+        return customerService.showEditCustomerDetailModal(id);
+    }
+
+    //异步更新客户
+    @RequestMapping("/workbench/customer/updateCustomer")
+    public ResultVo updateCustomer(Customer customer, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            customerService.updateCustomer(customer, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("更新客户信息成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //异步删除客户
+    @RequestMapping("workbench/customer/deleteCustomer")
+    public ResultVo deleteCustomer(String id) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            customerService.deleteCustomerById(id);
+            resultVo.setResOK(true);
+            resultVo.setMessage("删除客户成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }
