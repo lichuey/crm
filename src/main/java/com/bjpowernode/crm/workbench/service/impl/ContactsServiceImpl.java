@@ -236,4 +236,30 @@ public class ContactsServiceImpl implements ContactsService {
             throw new CrmException(CrmEnum.CONTACTS_REMARK_DELETE_FALSE);
         }
     }
+
+    //查询联系人
+    @Override
+    public Contacts selectContactsById(String id) {
+        return contactsMapper.selectByPrimaryKey(id);
+    }
+
+    //更新联系人
+    @Override
+    public void updateContacts(Contacts contacts, User user) {
+        contacts.setEditBy(user.getName());
+        contacts.setEditTime(DateTimeUtil.getSysTime());
+        int count = contactsMapper.updateByPrimaryKeySelective(contacts);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CONTACTS_UPDATE_FALSE);
+        }
+    }
+
+    //删除联系人
+    @Override
+    public void deleteContacts(Contacts contacts) {
+        int count = contactsMapper.deleteByPrimaryKey(contacts);
+        if (count == 0) {
+            throw new CrmException(CrmEnum.CONTACTS_DELETE_FALSE);
+        }
+    }
 }

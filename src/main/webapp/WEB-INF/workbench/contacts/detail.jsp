@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -10,6 +11,8 @@
 		<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
 		<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+		<%--layer--%>
+		<script type="text/javascript" src="jquery/layer/layer.js"></script>
 		
 		<script type="text/javascript">
 		
@@ -151,29 +154,18 @@
 								<label for="edit-contactsOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-contactsOwner">
-									  <option selected>zhangsan</option>
-									  <option>lisi</option>
-									  <option>wangwu</option>
+									  <c:forEach items="${userList}" var="user">
+										  <option value="${user.id}">${user.name}</option>
+									  </c:forEach>
 									</select>
 								</div>
 								<label for="edit-clueSource" class="col-sm-2 control-label">来源</label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-clueSource">
 									  <option></option>
-									  <option selected>广告</option>
-									  <option>推销电话</option>
-									  <option>员工介绍</option>
-									  <option>外部介绍</option>
-									  <option>在线商场</option>
-									  <option>合作伙伴</option>
-									  <option>公开媒介</option>
-									  <option>销售邮件</option>
-									  <option>合作伙伴研讨会</option>
-									  <option>内部研讨会</option>
-									  <option>交易会</option>
-									  <option>web下载</option>
-									  <option>web调研</option>
-									  <option>聊天</option>
+									  <c:forEach items="${map['source']}" var="source">
+										  <option value="${source.value}">${source.text}</option>
+									  </c:forEach>
 									</select>
 								</div>
 							</div>
@@ -181,17 +173,15 @@
 							<div class="form-group">
 								<label for="edit-surname" class="col-sm-2 control-label">姓名<span style="font-size: 15px; color: red;">*</span></label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-surname" value="李四">
+									<input type="text" class="form-control" id="edit-surname">
 								</div>
 								<label for="edit-call" class="col-sm-2 control-label">称呼</label>
 								<div class="col-sm-10" style="width: 300px;">
 									<select class="form-control" id="edit-call">
-									  <option></option>
-									  <option selected>先生</option>
-									  <option>夫人</option>
-									  <option>女士</option>
-									  <option>博士</option>
-									  <option>教授</option>
+									  	<option></option>
+										<c:forEach items="${map['appellation']}" var="appellation">
+											<option value="${appellation.value}">${appellation.text}</option>
+										</c:forEach>
 									</select>
 								</div>
 							</div>
@@ -199,18 +189,18 @@
 							<div class="form-group">
 								<label for="edit-job" class="col-sm-2 control-label">职位</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-job" value="CTO">
+									<input type="text" class="form-control" id="edit-job">
 								</div>
 								<label for="edit-mphone" class="col-sm-2 control-label">手机</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-mphone" value="12345678901">
+									<input type="text" class="form-control" id="edit-mphone">
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label for="edit-email" class="col-sm-2 control-label">邮箱</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-email" value="lisi@bjpowernode.com">
+									<input type="text" class="form-control" id="edit-email">
 								</div>
 								<label for="edit-birth" class="col-sm-2 control-label">生日</label>
 								<div class="col-sm-10" style="width: 300px;">
@@ -221,14 +211,14 @@
 							<div class="form-group">
 								<label for="edit-customerName" class="col-sm-2 control-label">客户名称</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="edit-customerName" placeholder="支持自动补全，输入客户不存在则新建" value="动力节点">
+									<input type="text" class="form-control" id="edit-customerName" placeholder="支持自动补全，输入客户不存在则新建">
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label for="edit-describe" class="col-sm-2 control-label">描述</label>
 								<div class="col-sm-10" style="width: 81%;">
-									<textarea class="form-control" rows="3" id="edit-describe">这是一条线索的描述信息</textarea>
+									<textarea class="form-control" rows="3" id="edit-describe"></textarea>
 								</div>
 							</div>
 
@@ -255,7 +245,7 @@
 								<div class="form-group">
 									<label for="edit-address1" class="col-sm-2 control-label">详细地址</label>
 									<div class="col-sm-10" style="width: 81%;">
-										<textarea class="form-control" rows="1" id="edit-address1">北京大兴区大族企业湾</textarea>
+										<textarea class="form-control" rows="1" id="edit-address1"></textarea>
 									</div>
 								</div>
 							</div>
@@ -264,7 +254,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="updateContacts()">更新</button>
 					</div>
 				</div>
 			</div>
@@ -312,8 +302,8 @@
 			<div class="page-header" id="divTestId">
 			</div>
 			<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editContactsModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
-				<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				<button type="button" class="btn btn-default" data-toggle="modal" onclick="showEditContactsModal()"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+				<button type="button" class="btn btn-danger" onclick="deleteContacts()"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 			</div>
 		</div>
 
@@ -630,6 +620,81 @@
 					}
 				}, "json");
 			}
+
+			//展现编辑模态框
+			function showEditContactsModal() {
+				//查询联系人
+				$.get("workbench/contacts/selectContactsById", {
+					"id": "${id}"
+				}, function (data) {
+					//data:contacts
+					var contacts = data;
+					$("#edit-contactsOwner").val(contacts.owner);
+					$("#edit-clueSource").val(contacts.source);
+					$("#edit-surname").val(contacts.fullname);
+					$("#edit-call").val(contacts.appellation);
+					$("#edit-job").val(contacts.job);
+					$("#edit-mphone").val(contacts.mphone);
+					$("#edit-email").val(contacts.email);
+					$("#edit-birth").val(contacts.birth);
+					$("#edit-customerName").val(contacts.customerId);
+					$("#edit-describe").val(contacts.description);
+					$("#create-contactSummary").val(contacts.contactSummary);
+					$("#create-nextContactTime").val(contacts.nextContactTime);
+					$("#edit-address1").val(contacts.address);
+
+					$("#editContactsModal").modal("show");
+
+				}, "json");
+			}
+
+			//异步更新联系人
+			function updateContacts() {
+				$.post("workbench/contacts/updateContacts", {
+					"id": "${id}",
+					"owner": $("#edit-contactsOwner").val(),
+					"source": $("#edit-clueSource").val(),
+					"fullname": $("#edit-surname").val(),
+					"appellation": $("#edit-call").val(),
+					"email": $("#edit-email").val(),
+					"mphone": $("#edit-mphone").val(),
+					"job": $("#edit-job").val(),
+					"birth": $("#edit-birth").val(),
+					"customerId": $("#edit-customerName").val(),
+					"description": $("#edit-describe").val(),
+					"contactSummary": $("#create-contactSummary").val(),
+					"nextContactTime": $("#create-nextContactTime").val(),
+					"address": $("#edit-address1").val()
+				}, function (data) {
+					//data:resultVo
+					if (data.resOK) {
+						alert(data.message);
+
+						refresh();
+					}
+				}, "json");
+			}
+
+			//异步删除联系人
+			function deleteContacts() {
+				layer.alert('你确定删除这条活动吗？此操作不可逆！', {
+					time: 0 //不自动关闭
+					,btn: ['删除', '取消']
+					,yes: function(index){
+						layer.close(index);
+						$.post("workbench/contacts/deleteContacts", {
+							"id": "${id}"
+						}, function (data) {
+							//data:resultVo
+						}, "json");
+
+						//跳转到index.jsp
+						location.href = "toView/workbench/contacts/index";
+					}
+				});
+			}
+
+
 
 		</script>
 	</body>

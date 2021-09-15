@@ -123,4 +123,39 @@ public class ContactsController {
         }
         return resultVo;
     }
+
+    //查询联系人
+    @RequestMapping("/workbench/contacts/selectContactsById")
+    public Contacts selectContactsById(String id) {
+        return contactsService.selectContactsById(id);
+    }
+
+    //异步更新联系人
+    @RequestMapping("/workbench/contacts/updateContacts")
+    public ResultVo updateContacts(Contacts contacts, HttpSession session) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            contactsService.updateContacts(contacts, user);
+            resultVo.setResOK(true);
+            resultVo.setMessage("联系人更新成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //异步删除联系人
+    @RequestMapping("/workbench/contacts/deleteContacts")
+    public ResultVo deleteContacts(Contacts contacts) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            contactsService.deleteContacts(contacts);
+            resultVo.setResOK(true);
+            resultVo.setMessage("联系人删除成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
 }

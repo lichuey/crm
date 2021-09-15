@@ -36,4 +36,14 @@ public interface ContactsService {
 
     //删除联系人备注
     void deleteContactsRemark(String id);
+
+    //查询联系人
+    Contacts selectContactsById(String id);
+
+    //更新联系人
+    void updateContacts(Contacts contacts, User user);
+
+    //删除联系人
+    void deleteContacts(Contacts contacts);
+
 }
