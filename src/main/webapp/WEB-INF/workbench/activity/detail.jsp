@@ -140,7 +140,7 @@
 								<div class="col-sm-10" style="width: 300px;">
 									<input type="text" class="form-control" id="edit-cost" name="cost">
 									<%--隐藏域--%>
-									<input type="hidden" name="id" id="id" value="'${id}'">
+									<input type="hidden" name="id" id="id" value="${id}">
 								</div>
 							</div>
 
@@ -436,15 +436,15 @@
 
 			//异步更新市场活动
 			$("#updateActivityModal").click(function () {
-				$.post("workbench/activity/updateActivityModal", {
-					"id": "${id}",
+				$.post("workbench/activity/updateActivityModal", $("#editForm").serialize()
+					/*"id": "",
 					"owner": $("#edit-marketActivityOwner").val(),
 					"name": $("#edit-marketActivityName").val(),
 					"startDate": $("#edit-startTime").val(),
 					"endDate": $("#edit-endTime").val(),
 					"cost": $("#edit-cost").val(),
-					"description": $("#edit-describe").val()
-				}, function (data) {
+					"description": $("#edit-describe").val()*/
+				, function (data) {
 					//data:resultVo
 					if (data.resOK) {
 						alert(data.message);

@@ -3,7 +3,6 @@ package com.bjpowernode.crm.workbench.controller;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.CommonUtil;
-import com.bjpowernode.crm.base.util.UUIDUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.ActivityRemark;
 import com.bjpowernode.crm.workbench.service.ActivityService;
