@@ -6,6 +6,7 @@ import tk.mybatis.mapper.code.Style;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Data
 @Table(name = "tbl_clue")
@@ -33,5 +34,7 @@ public class Clue {
     private String contactSummary;
     private String nextContactTime;
     private String address;
+
+    private List<Activity> activityList;
 
 }

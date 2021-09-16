@@ -66,5 +66,17 @@ public class ClueController {
         return resultVo;
     }
 
+    //查询线索
+    @RequestMapping("/workbench/clue/queryClue")
+    public Clue queryClue(String id) {
+        return clueService.queryClue(id);
+    }
+
+    //查询其他市场活动
+    @RequestMapping("/workbench/clue/selectOtherActivity")
+    public List<Activity> selectOtherActivity(String name, String id) {
+        return clueService.selectOtherActivity(name, id);
+    }
+
 
 }

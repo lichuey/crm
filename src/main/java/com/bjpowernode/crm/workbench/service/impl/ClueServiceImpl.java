@@ -10,6 +10,9 @@ import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.settings.mapper.UserMapper;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Clue;
+import com.bjpowernode.crm.workbench.bean.ClueActivityRelation;
+import com.bjpowernode.crm.workbench.mapper.ActivityMapper;
+import com.bjpowernode.crm.workbench.mapper.ClueActivityRelationMapper;
 import com.bjpowernode.crm.workbench.mapper.ClueMapper;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +32,12 @@ public class ClueServiceImpl implements ClueService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ClueActivityRelationMapper clueActivityRelationMapper;
+
+    @Autowired
+    private ActivityMapper activityMapper;
 
     //查询线索
     @Override
@@ -135,5 +144,66 @@ public class ClueServiceImpl implements ClueService {
         if (count == 0) {
             throw new CrmException(CrmEnum.CLUE_DELETE_FALSE);
         }
+    }
+
+    //查询线索
+    @Override
+    public Clue queryClue(String id) {
+        //根据主键查询线索
+        Clue clue = clueMapper.selectByPrimaryKey(id);
+
+        //查询所有满足clueId为id的ClueActivityRelation
+        Example example = new Example(ClueActivityRelation.class);
+        example.createCriteria().andEqualTo("clueId", id);
+        List<ClueActivityRelation> clueActivityRelations = clueActivityRelationMapper.selectByExample(example);
+
+        //通过clueActivityRelations中的activityId查找所有市场活动
+        List<Activity> activityList = new ArrayList<>();
+        for (ClueActivityRelation clueActivityRelation : clueActivityRelations) {
+            Activity activity = activityMapper.selectByPrimaryKey(clueActivityRelation.getActivityId());
+
+            //处理活动中的owner
+            User user = userMapper.selectByPrimaryKey(activity.getOwner());
+            activity.setOwner(user.getName());
+
+            activityList.add(activity);
+        }
+
+        clue.setActivityList(activityList);
+
+        return clue;
+    }
+
+    //查询其他市场活动
+    @Override
+    public List<Activity> selectOtherActivity(String name, String id) {
+        //通过线索id查询市场活动id
+        Example example = new Example(ClueActivityRelation.class);
+        example.createCriteria().andEqualTo("clueId", id);
+        List<ClueActivityRelation> clueActivityRelations = clueActivityRelationMapper.selectByExample(example);
+
+        //将市场活动id存入数组中
+        List<String> list = new ArrayList<>();
+        for (ClueActivityRelation clueActivityRelation : clueActivityRelations) {
+            list.add(clueActivityRelation.getActivityId());
+        }
+
+        //根据条件查询市场活动
+        Example example1 = new Example(Activity.class);
+        Example.Criteria criteria = example1.createCriteria();
+        if (StrUtil.isNotEmpty(name)) {
+            criteria.andLike("name", "%" + name + "%");
+        }
+
+        criteria.andNotIn("id", list);
+
+        List<Activity> activityList = activityMapper.selectByExample(example1);
+
+        for (Activity activity : activityList) {
+            User user = userMapper.selectByPrimaryKey(activity.getOwner());
+            activity.setOwner(user.getName());
+        }
+
+        return activityList;
     }
 }
