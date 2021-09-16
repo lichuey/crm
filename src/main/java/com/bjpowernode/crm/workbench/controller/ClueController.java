@@ -6,6 +6,7 @@ import com.bjpowernode.crm.base.util.CommonUtil;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Clue;
+import com.bjpowernode.crm.workbench.bean.ClueActivityRelation;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,34 @@ public class ClueController {
     @RequestMapping("/workbench/clue/selectOtherActivity")
     public List<Activity> selectOtherActivity(String name, String id) {
         return clueService.selectOtherActivity(name, id);
+    }
+
+    //关联市场活动
+    @RequestMapping("/workbench/clue/bind")
+    public ResultVo bind(String id, String ids) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            clueService.bind(id, ids);
+            resultVo.setResOK(true);
+            resultVo.setMessage("关联市场活动成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //取消关联市场活动
+    @RequestMapping("/workbench/clue/unbind")
+    public ResultVo unbind(ClueActivityRelation clueActivityRelation) {
+        ResultVo resultVo = new ResultVo();
+        try {
+            clueService.unbind(clueActivityRelation);
+            resultVo.setResOK(true);
+            resultVo.setMessage("取消关联市场活动成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
     }
 
 

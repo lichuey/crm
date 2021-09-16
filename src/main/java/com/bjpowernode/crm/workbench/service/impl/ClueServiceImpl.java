@@ -206,4 +206,27 @@ public class ClueServiceImpl implements ClueService {
 
         return activityList;
     }
+
+    //关联市场活动
+    @Override
+    public void bind(String id, String ids) {
+        String[] activityIds = ids.split(",");
+        ClueActivityRelation clueActivityRelation = new ClueActivityRelation();
+        for (String activityId : activityIds) {
+            clueActivityRelation.setId(UUIDUtil.uuid());
+            clueActivityRelation.setClueId(id);
+            clueActivityRelation.setActivityId(activityId);
+
+            int count = clueActivityRelationMapper.insertSelective(clueActivityRelation);
+            if (count == 0) {
+                throw new CrmException(CrmEnum.BIND_ACTIVITY_FALSE);
+            }
+        }
+    }
+
+    //取消关联市场活动
+    @Override
+    public void unbind(ClueActivityRelation clueActivityRelation) {
+        clueActivityRelationMapper.delete(clueActivityRelation);
+    }
 }

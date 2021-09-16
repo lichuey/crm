@@ -92,7 +92,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-						<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="bind()">关联</button>
 					</div>
 				</div>
 			</div>
@@ -441,6 +441,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div style="height: 200px;"></div>
 		<script>
 
+            refresh();
+
             //刷新
             function refresh() {
                 //通过线索id查询线索
@@ -456,7 +458,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             "\t\t\t\t\t\t\t\t<td>"+ activity.startDate +"</td>\n" +
                             "\t\t\t\t\t\t\t\t<td>"+ activity.endDate +"</td>\n" +
                             "\t\t\t\t\t\t\t\t<td>"+ activity.owner +"</td>\n" +
-                            "\t\t\t\t\t\t\t\t<td><a href=\"javascript:void(0);\"  style=\"text-decoration: none;\"><span class=\"glyphicon glyphicon-remove\"></span>解除关联</a></td>\n" +
+                            "\t\t\t\t\t\t\t\t<td><a href=\"javascript:void(0);\"  style=\"text-decoration: none;\" onclick=\"unbind('"+ activity.id +"')\"><span class=\"glyphicon glyphicon-remove\"></span>解除关联</a></td>\n" +
                             "\t\t\t\t\t\t\t</tr>");
                     }
                 }, "json");
@@ -507,7 +509,45 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                     $("#father").prop("checked", false);
             }
 
-            //关联
+            //关联市场活动
+            function bind() {
+                //定义数组，存储所有activityId
+                var activityIdList = [];
+                $(".son:checked").each(function () {
+                    activityIdList.push($(this).val());
+                });
+
+                $.post("workbench/clue/bind", {
+                    "id": "${id}",
+                    "ids": activityIdList.join()
+                }, function (data) {
+                    //data:resultVo
+                    if (data.resOK) {
+                        alert(data.message);
+
+                        $("#activityTbody").html("");
+
+                        refresh();
+                    }
+                }, "json");
+            }
+
+            //取消关联市场活动
+            function unbind(id) {
+                $.post("workbench/clue/unbind",{
+                    "clueId":"${id}",
+                    "activityId": id
+                },function (data) {
+                    //data:resultVo
+                    if (data.resOK) {
+                        alert(data.message);
+
+                        $("#activityTbody").html("");
+
+                        refresh();
+                    }
+                },"json");
+            }
 
 
 
