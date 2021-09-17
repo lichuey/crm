@@ -5,6 +5,7 @@ import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Clue;
 import com.bjpowernode.crm.workbench.bean.ClueActivityRelation;
+import com.bjpowernode.crm.workbench.bean.Tran;
 
 import java.util.List;
 
@@ -33,4 +34,13 @@ public interface ClueService {
 
     //取消关联市场活动
     void unbind(ClueActivityRelation clueActivityRelation);
+
+    //通过id查询clue
+    Clue selectClueById(String id);
+
+    //线索转换
+    void convert(String id, User user, String isCreateTransaction, Tran tran);
+
+    //查询绑定的市场活动
+    List<Activity> selectBindActivity(String id, String name);
 }

@@ -7,6 +7,7 @@ import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.bjpowernode.crm.workbench.bean.Clue;
 import com.bjpowernode.crm.workbench.bean.ClueActivityRelation;
+import com.bjpowernode.crm.workbench.bean.Tran;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +108,31 @@ public class ClueController {
         return resultVo;
     }
 
+    //通过id查询clue
+    @RequestMapping("/workbench/clue/selectClueById")
+    public Clue selectClueById(String id) {
+        return clueService.selectClueById(id);
+    }
+
+    //线索转换
+    @RequestMapping("/workbench/clue/convert")
+    public ResultVo convert(String id, HttpSession session, String isCreateTransaction, Tran tran) {
+        ResultVo resultVo = new ResultVo();
+        User user = CommonUtil.getCurrentUser(session);
+        try {
+            clueService.convert(id, user, isCreateTransaction, tran);
+            resultVo.setResOK(true);
+            resultVo.setMessage("线索转换成功");
+        } catch (CrmException e) {
+            resultVo.setMessage(e.getMessage());
+        }
+        return resultVo;
+    }
+
+    //查询绑定的市场活动
+    @RequestMapping("/workbench/clue/selectBindActivity")
+    public List<Activity> selectBindActivity(String id, String name) {
+        return clueService.selectBindActivity(id, name);
+    }
 
 }

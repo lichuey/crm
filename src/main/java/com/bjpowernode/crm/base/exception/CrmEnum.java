@@ -32,7 +32,8 @@ public enum CrmEnum {
     CLUE_SAVE_FALSE("004-001-001", "线索保存失败"),
     CLUE_UPDATE_FALSE("004-002-001", "线索更新失败"),
     CLUE_DELETE_FALSE("004-003-001", "线索删除失败"),
-    BIND_ACTIVITY_FALSE("005-001-001", "关联市场活动失败");
+    BIND_ACTIVITY_FALSE("005-001-001", "关联市场活动失败"),
+    CONVERT_CLUE_FALSE("006-001-001", "线索转换失败");
 
 
     private String code;//业务码
