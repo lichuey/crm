@@ -112,8 +112,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 
 		<!-- 阶段状态 -->
-		<div style="position: relative; left: 40px; top: -50px;">
-			阶段&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<div style="position: relative; left: 40px; top: -50px;" id="stageDiv">
+			<%--阶段&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<span class="glyphicon glyphicon-ok-circle mystage" data-toggle="popover" data-placement="bottom" data-content="资质审查" style="color: #90F790;"></span>
 			-----------
 			<span class="glyphicon glyphicon-ok-circle mystage" data-toggle="popover" data-placement="bottom" data-content="需求分析" style="color: #90F790;"></span>
@@ -132,7 +132,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			-----------
 			<span class="glyphicon glyphicon-record mystage" data-toggle="popover" data-placement="bottom" data-content="因竞争丢失关闭"></span>
 			-----------
-			<span class="closingDate">2010-10-10</span>
+			<span class="closingDate">2010-10-10</span>--%>
 		</div>
 
 		<!-- 详细信息 -->
@@ -157,7 +157,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div style="width: 300px; color: gray;">客户名称</div>
 				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>动力节点</b></div>
 				<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">阶段</div>
-				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>谈判/复审</b></div>
+				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="stage">谈判/复审</b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 			</div>
@@ -165,7 +165,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<div style="width: 300px; color: gray;">类型</div>
 				<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>新业务</b></div>
 				<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">可能性</div>
-				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>90</b></div>
+				<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="possibility">90</b></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 				<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 			</div>
@@ -280,31 +280,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>创建人</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="historyTbody">
+							<%--<tr>
 								<td>资质审查</td>
 								<td>5,000</td>
 								<td>10</td>
 								<td>2017-02-07</td>
 								<td>2016-10-10 10:10:10</td>
 								<td>zhangsan</td>
-							</tr>
-							<tr>
-								<td>需求分析</td>
-								<td>5,000</td>
-								<td>20</td>
-								<td>2017-02-07</td>
-								<td>2016-10-20 10:10:10</td>
-								<td>zhangsan</td>
-							</tr>
-							<tr>
-								<td>谈判/复审</td>
-								<td>5,000</td>
-								<td>90</td>
-								<td>2017-02-07</td>
-								<td>2017-02-09 10:10:10</td>
-								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
@@ -315,12 +299,84 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div style="height: 200px;"></div>
 
 		<script>
-			//异步查询当前交易对应的交易图标
-			$.get("workbench/transaction/queryStages", {
-				"id": "${id}"
-			}, function (data) {
-				//data:List<StageVo>
-			}, "json");
+			refresh();
+
+			function refresh(index) {
+				//异步查询当前交易对应的交易图标
+				$.get("workbench/transaction/queryStages", {
+					"id": "${id}",
+					"index": index
+				}, function (data) {
+					//清空
+					$("#stageDiv").html("");
+					//data:Map<String,Object>
+					var stageVoList = data.stageVos;
+					var tranHistory = data.tranHistory;
+					var index = data.index;
+
+					if (index >= 0) {
+						$("#historyTbody").append("<tr>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ tranHistory.stage +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ tranHistory.money +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ tranHistory.possibility +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ tranHistory.expectedDate +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ tranHistory.createTime +"</td>\n" +
+								"\t\t\t\t\t\t\t\t<td>"+ tranHistory.createBy +"</td>\n" +
+								"\t\t\t\t\t\t\t</tr>");
+					}
+
+					$("#stageDiv").append("阶段&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+					for (var i = 0; i < stageVoList.length; i++) {
+						var stageVo = stageVoList[i];
+						if (stageVo.type === "黑圈") {
+							$("#stageDiv").append("<span onclick='changeStage("+ i +")' class=\"glyphicon glyphicon-record mystage\" data-toggle=\"popover\" data-placement=\"bottom\" data-content=" + stageVo.stage + " ></span>\n" +
+									"\t\t\t-----------");
+						} else if (stageVo.type === "锚点") {
+							$("#stageDiv").append("<span onclick='changeStage("+ i +")' class=\"glyphicon glyphicon-map-marker mystage\" data-toggle=\"popover\" data-placement=\"bottom\" data-content=" + stageVo.stage + " style=\"color: #90F790;\"></span>\n" +
+									"\t\t\t-----------");
+							$("#stage").text(stageVo.stage);
+							$("#possibility").text(stageVo.possibility);
+						} else if (stageVo.type === "绿圈") {
+							$("#stageDiv").append("<span onclick='changeStage("+ i +")' class=\"glyphicon glyphicon-ok-circle mystage\" data-toggle=\"popover\" data-placement=\"bottom\" data-content=" + stageVo.stage + " style=\"color: #90F790;\"></span>\n" +
+									"\t\t\t-----------");
+						} else if (stageVo.type === "黑叉") {
+							$("#stageDiv").append("<span onclick='changeStage("+ i +")' class=\"glyphicon glyphicon-remove mystage\" data-toggle=\"popover\" data-placement=\"bottom\" data-content=" + stageVo.stage + " ></span>\n" +
+									"\t\t\t-----------");
+						} else if (stageVo.type === "红叉") {
+							$("#stageDiv").append("<span onclick='changeStage("+ i +")' class=\"glyphicon glyphicon-remove mystage\" data-toggle=\"popover\" data-placement=\"bottom\" data-content=" + stageVo.stage + " style=\" color:red \"></span>\n" +
+									"\t\t\t-----------");
+							$("#stage").text(stageVo.stage);
+							$("#possibility").text(stageVo.possibility);
+						}
+					}
+					$("#stageDiv").append("<span class=\"closingDate\">"+ new Date().toLocaleDateString() +"</span>");
+
+					//阶段提示框
+					$(".mystage").popover({
+						trigger:'manual',
+						placement : 'bottom',
+						html: 'true',
+						animation: false
+					}).on("mouseenter", function () {
+						var _this = this;
+						$(this).popover("show");
+						$(this).siblings(".popover").on("mouseleave", function () {
+							$(_this).popover('hide');
+						});
+					}).on("mouseleave", function () {
+						var _this = this;
+						setTimeout(function () {
+							if (!$(".popover:hover").length) {
+								$(_this).popover("hide")
+							}
+						}, 100);
+					});
+				}, "json");
+			}
+
+			function changeStage(index) {
+				refresh(index);
+			}
 		</script>
 
 	</body>

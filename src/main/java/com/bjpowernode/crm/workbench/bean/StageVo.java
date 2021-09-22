@@ -9,5 +9,6 @@ import lombok.Data;
 public class StageVo {
 
     private String type;//图标的种类
-    private String content;//图标内容
+    private String stage;//图标阶段
+    private String possibility;//图标可能性
 }

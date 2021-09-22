@@ -1,5 +1,7 @@
 package com.bjpowernode.crm.workbench.controller;
 
+import com.bjpowernode.crm.base.util.CommonUtil;
+import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.StageVo;
 import com.bjpowernode.crm.workbench.service.TranService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,10 @@ public class TranController{
 
     //查询交易的阶段图标
     @RequestMapping("/workbench/transaction/queryStages")
-    public List<StageVo> queryStages(String id, HttpSession session) {
-        Map<String,String> stage2Possibility =
+    public Map<String,Object> queryStages(Integer index, String id, HttpSession session) {
+        Map<String, String> stage2Possibility =
                 (Map<String, String>) session.getServletContext().getAttribute("stage2Possibility");
-        return tranService.queryStages(id, stage2Possibility);
+        User user = CommonUtil.getCurrentUser(session);
+        return tranService.queryStages(index, id, stage2Possibility,user);
     }
 }
