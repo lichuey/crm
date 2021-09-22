@@ -15,10 +15,12 @@ import java.util.Enumeration;
 public class ViewController {
 
     //跳转到workbench的main下的index.jsp视图
-    @RequestMapping({"/toView/{firstView}/{secondView}","/toView/{firstView}/{secondView}/{thirdView}"})
+    @RequestMapping({"/toView/{firstView}/{secondView}","/toView/{firstView}/{secondView}/{thirdView}"
+            ,"/toView/{firstView}/{secondView}/{thirdView}/{fourthView}"})
     public String toView(@PathVariable(value = "firstView",required = false) String firstView,
                          @PathVariable(value = "secondView",required = false) String secondView,
                          @PathVariable(value = "thirdView",required = false) String thirdView,
+                         @PathVariable(value = "fourthView",required = false) String fourthView,
                          HttpServletRequest request) {
 
         //使视图转化可以传递参数
@@ -32,6 +34,9 @@ public class ViewController {
         if (thirdView == null) {
             return firstView + File.separator + secondView;
         }
-        return firstView + File.separator + secondView + File.separator + thirdView;
+        if (fourthView == null) {
+            return firstView + File.separator + secondView + File.separator + thirdView;
+        }
+        return firstView + File.separator + secondView + File.separator + thirdView + File.separator + fourthView;
     }
 }
