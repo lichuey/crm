@@ -10,9 +10,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class CrmCache {
@@ -57,6 +55,23 @@ public class CrmCache {
 
         //存入到servletContext
         servletContext.setAttribute("map", map);
+
+        //读取stage2Possibility.properties
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("mybatis.Stage2Possibility");
+
+        //获取文件中所有的key
+        Enumeration<String> keys = resourceBundle.getKeys();
+
+        //定义一个map集合，存储所有的文件
+        Map<String, String> map1 = new TreeMap<>();
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            String value = resourceBundle.getString(key);
+            map1.put(key, value);
+        }
+
+        //存入到servletContext中
+        servletContext.setAttribute("stage2Possibility", map1);
 
     }
 
