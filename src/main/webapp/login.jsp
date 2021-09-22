@@ -51,6 +51,10 @@
 	</div>
 </body>
 <script>
+	//顶层窗口
+	if (window != top) {
+		top.location.href = "/crm/login.jsp";
+	}
 	<%--点击图片改变验证码--%>
 	function changeCode() {
 		//attr:attribute 操作自定义属性 prop:操作固有属性

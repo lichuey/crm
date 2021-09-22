@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mav="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/mvc
@@ -44,5 +45,18 @@ com.bjpowernode.crm.base.controller,com.bjpowernode.crm.workbench.controller" />
     </bean>
 
     <!--登录拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--拦截此文件夹及其子文件夹-->
+            <mvc:mapping path="/**"/>
+            <!--放行-->
+            <mvc:exclude-mapping path="/jquery/**"/>
+            <mvc:exclude-mapping path="/image/**"/>
+            <mvc:exclude-mapping path="/code"/>
+            <mvc:exclude-mapping path="/settings/user/login"/>
+
+            <bean class="com.bjpowernode.crm.base.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>
