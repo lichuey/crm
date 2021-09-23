@@ -1,6 +1,8 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmEnum;
 import com.bjpowernode.crm.base.exception.CrmException;
@@ -16,11 +18,13 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -252,5 +256,37 @@ public class ActivityServiceImpl implements ActivityService {
         if (count == 0) {
             throw new CrmException(CrmEnum.ACTIVITY_DELETE_FALSE);
         }
+    }
+
+    //导出报表
+    @Override
+    public ExcelWriter exportExcel() {
+        ExcelWriter writer = ExcelUtil.getWriter();
+
+        Example example = new Example(Activity.class);
+        Map<String, EntityColumn> propertyMap = example.getPropertyMap();
+        List<Activity> activityList = activityMapper.selectByExample(example);
+
+        //自定义标题别名
+        writer.addHeaderAlias("id", "编号");
+        writer.addHeaderAlias("owner", "所有者");
+        writer.addHeaderAlias("name", "姓名");
+        writer.addHeaderAlias("startDate", "开始时间");
+        writer.addHeaderAlias("endDate", "结束时间");
+        writer.addHeaderAlias("cost", "花费");
+        writer.addHeaderAlias("description", "描述");
+        writer.addHeaderAlias("createTime", "创建时间");
+        writer.addHeaderAlias("createBy", "创建者");
+        writer.addHeaderAlias("editTime", "编辑时间");
+        writer.addHeaderAlias("editBy", "编辑者");
+        writer.addHeaderAlias("activityRemarkList", "z");
+
+        // 合并单元格后的标题行，使用默认标题样式
+        writer.merge(propertyMap.size() - 1, "市场活动表");
+
+        // 一次性写出内容，使用默认样式，强制输出标题
+        writer.write(activityList, true);
+
+        return writer;
     }
 }

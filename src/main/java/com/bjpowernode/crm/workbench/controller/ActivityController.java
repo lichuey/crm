@@ -1,5 +1,8 @@
 package com.bjpowernode.crm.workbench.controller;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.base.exception.CrmException;
 import com.bjpowernode.crm.base.util.CommonUtil;
@@ -9,17 +12,23 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.bean.Activity;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.transform.Result;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * 市场活动控制器
  * RestController:自动的给Controller中的每个方法返回值定为返回json
  */
-@RestController
+@Controller
 public class ActivityController{
 
     @Autowired
@@ -67,6 +76,7 @@ public class ActivityController{
 
     //使用BootStrap分页插件实现,查询
     @RequestMapping("/workbench/activity/list")
+    @ResponseBody
     public PageInfo list(int page, int pageSize, Activity activity) {
 
         //查询所有的市场活动
@@ -84,6 +94,7 @@ public class ActivityController{
 
     //保存或更新活动
     @RequestMapping("/workbench/activity/saveOrUpdate")
+    @ResponseBody
     public ResultVo saveOrUpdate(Activity activity, HttpSession session) {
         ResultVo resultVo = new ResultVo();
         try {
@@ -97,12 +108,14 @@ public class ActivityController{
 
     //通过id查询活动
     @RequestMapping("/workbench/activity/queryById")
+    @ResponseBody
     public Activity queryById(String id) {
         return activityService.queryById(id);
     }
 
     //批量删除
     @RequestMapping("/workbench/activity/deleteBatch")
+    @ResponseBody
     public ResultVo deleteBatch(String ids) {
         ResultVo resultVo = new ResultVo();
         try {
@@ -117,12 +130,14 @@ public class ActivityController{
 
     //查询市场活动详情页的数据
     @RequestMapping("/workbench/activity/selectDetail")
+    @ResponseBody
     public Activity selectDetail(String id) {
         return activityService.selectDetail(id);
     }
 
     //保存市场活动备注
     @RequestMapping("/workbench/activity/saveActivityRemark")
+    @ResponseBody
     public ResultVo saveActivityRemark(ActivityRemark activityRemark, HttpSession session) {
         ResultVo resultVo = new ResultVo();
         try {
@@ -138,6 +153,7 @@ public class ActivityController{
 
     //更新市场活动备注
     @RequestMapping("/workbench/activity/updateActivityRemark")
+    @ResponseBody
     public ResultVo updateActivityRemark(ActivityRemark activityRemark, HttpSession session) {
         ResultVo resultVo = new ResultVo();
         User user = CommonUtil.getCurrentUser(session);
@@ -153,6 +169,7 @@ public class ActivityController{
 
     //异步删除市场活动备注
     @RequestMapping("/workbench/activity/deleteActivityRemark")
+    @ResponseBody
     public ResultVo deleteActivityRemark(String id) {
         ResultVo resultVo = new ResultVo();
         try {
@@ -167,12 +184,14 @@ public class ActivityController{
 
     //异步通过id查询活动
     @RequestMapping("/workbench/activity/selectActivityById")
+    @ResponseBody
     public Activity selectActivityById(String id) {
         return activityService.selectActivityById(id);
     }
 
     //异步更新市场活动
     @RequestMapping("/workbench/activity/updateActivityModal")
+    @ResponseBody
     public ResultVo updateActivityModal(Activity activity, HttpSession session) {
         ResultVo resultVo = new ResultVo();
         User user = CommonUtil.getCurrentUser(session);
@@ -188,6 +207,7 @@ public class ActivityController{
 
     //异步删除市场活动
     @RequestMapping("/workbench/activity/deleteActivityDetail")
+    @ResponseBody
     public ResultVo deleteActivityDetail(String id) {
         ResultVo resultVo = new ResultVo();
         try {
@@ -198,5 +218,28 @@ public class ActivityController{
             resultVo.setMessage(e.getMessage());
         }
         return resultVo;
+    }
+
+    //导出报表
+    @RequestMapping("/workbench/activity/importExcel")
+    public void importExcel(HttpServletResponse response) {
+        ExcelWriter writer = null;
+        ServletOutputStream out = null;
+        try {
+            writer = activityService.exportExcel();
+            //response为HttpServletResponse对象
+            response.setContentType("application/vnd.ms-excel;charset=utf-8");
+            //test.xls是弹出下载对话框的文件名，不能为中文，中文请自行编码
+            response.setHeader("Content-Disposition","attachment;filename=test.xls");
+            out = response.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            writer.flush(out, true);
+            // 关闭writer，释放内存
+            writer.close();
+            //此处记得关闭输出Servlet流
+            IoUtil.close(out);
+        }
     }
 }

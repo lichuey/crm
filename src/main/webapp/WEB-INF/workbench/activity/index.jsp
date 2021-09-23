@@ -209,6 +209,7 @@
                                 class="glyphicon glyphicon-pencil"></span> 修改
                         </button>
                         <button type="button" onclick="deleteActivities()" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+                        <button type="button" onclick="importExcel()" class="btn btn-primary"><span class="glyphicon glyphicon-minus"></span> 导出报表</button>
                     </div>
 
                 </div>
@@ -621,6 +622,11 @@
                         }
                     });
                 }
+            }
+
+            //导出报表
+            function importExcel() {
+                location.href = "workbench/activity/importExcel";
             }
 
         </script>

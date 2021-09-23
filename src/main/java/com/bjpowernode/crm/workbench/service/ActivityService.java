@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.workbench.service;
 
+import cn.hutool.poi.excel.ExcelWriter;
 import com.bjpowernode.crm.base.bean.ResultVo;
 import com.bjpowernode.crm.settings.bean.User;
 import com.bjpowernode.crm.workbench.bean.Activity;
@@ -48,4 +49,7 @@ public interface ActivityService {
 
     //异步删除市场活动
     void deleteActivityDetail(String id);
+
+    //导出报表
+    ExcelWriter exportExcel();
 }
